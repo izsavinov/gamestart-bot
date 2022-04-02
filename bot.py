@@ -5,7 +5,7 @@ from sys import argv
 from config import Config
 
 
-config = Config(argv[1]).get_config()
+config = Config(argv[1]).config
 client = commands.Bot(command_prefix=config['prefix'])
 
 

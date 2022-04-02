@@ -8,9 +8,6 @@ class Config:
             self.config = json.load(f)
         self.config = environ | self.config
 
-    def get_config(self):
-        return self.config
-
     def dump(self, filename):
         with open(filename, 'w+') as f:
             json.dump(self.config, f)
