@@ -1,7 +1,12 @@
 from discord.ext import commands
 from os import environ
+from sys import argv
 
-client = commands.Bot(command_prefix='.')
+from config import Config
+
+
+config = Config(argv[1]).get_config()
+client = commands.Bot(command_prefix=config['prefix'])
 
 
 @client.event
@@ -16,4 +21,4 @@ async def hello(ctx):
     await ctx.send('Hello!')
 
 
-client.run(environ.get('TOKEN'))
+client.run(config['TOKEN'])
