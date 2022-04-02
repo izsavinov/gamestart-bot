@@ -11,13 +11,13 @@ client = commands.Bot(command_prefix=config['prefix'])
 
 @client.event
 async def on_ready():
-    """Функция пишет о подключении бота у серверу дискорда"""
+    """Сообщение о подключении бота."""
     print('BOT connected')
 
 
 @client.command(pass_context=True)
 async def hello(ctx):
-    """Приветствие пользователя в дискорде при вводе команды .hello"""
+    """Приветствие пользователя по команде в Discord."""
     await ctx.send(config['greeting'])
 
 
