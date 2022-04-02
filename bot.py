@@ -18,7 +18,7 @@ async def on_ready():
 @client.command(pass_context=True)
 async def hello(ctx):
     """Приветствие пользователя в дискорде при вводе команды .hello"""
-    await ctx.send('Hello!')
+    await ctx.send(config['greeting'])
 
 
 client.run(config['TOKEN'])
