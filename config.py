@@ -6,7 +6,7 @@ class Config:
     def __init__(self, filename):
         with open(filename) as f:
             self.config = json.load(f)
-        self.config = self.environ | self.config
+        self.config = environ | self.config
 
     def get_config(self):
         return self.config
