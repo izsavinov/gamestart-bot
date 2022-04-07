@@ -60,7 +60,7 @@ async def getnickfi(ctx, message1: str, message2: str):
 @client.command(pass_context=True)
 async def statistica(ctx):
     """Выводит статистику"""
-    statsdata_obj = statsdata(config['APPID'], config['url_base'])
+    statsdata_obj = statsdata(config['APIID'], config['url_base'])
     player_id = statsdata.player_details(statsdata_obj, nickFI, nickSteam)
     for i in range(0, len(player_id)):
         await ctx.send(player_id[i])
