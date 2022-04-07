@@ -1,4 +1,8 @@
 import requests
+from config import Config
+from sys import argv
+
+config = Config(argv[1]).config
 
 class statsdata:
     """Данные полученные с помощью API FACEIT"""
@@ -26,7 +30,7 @@ class statsdata:
         if game_player_id != None:
             if nickname != None:
                 api_url += "&game_player_id={}".format(game_player_id)
-        api_url += "&game={}".format(game)
+        api_url += "&game={}".format(config["game"])
         res = requests.get(api_url, headers=self.headers)
         data = res.json()
         if res.status_code == 200:
@@ -36,7 +40,7 @@ class statsdata:
 
         # Получим последний match_id
         api_url = "{}/players/{}/history".format(self.base_url, player_id)
-        api_url += "?game={}&offset={}&limit={}".format(game, 0, 1)
+        api_url += "?game={}&offset={}&limit={}".format(config["game"], 0, 1)
         response = requests.get(api_url, headers=self.headers)
         data = response.json()
         if response.status_code == 200:
