@@ -19,7 +19,7 @@ class statsdata:
             'Authorization': 'Bearer {}'.format(self.api_token)
         }
 
-    def player_details(self, nickname=None, game_player_id=None):
+    def player_details(self, nickname=None):
         """В эту функцию передаем параметры nickname от аккаунта в FACEIT и game_player_id от аккаунта в CS:GO.
            Функция возвращает статистику последнего матча.
         """
@@ -27,10 +27,6 @@ class statsdata:
         api_url = "{}/players".format(self.base_url)
         if nickname != None:
             api_url += "?nickname={}".format(nickname)
-        if game_player_id != None:
-            if nickname != None:
-                api_url += "&game_player_id={}".format(game_player_id)
-        api_url += "&game={}".format(config["game"])
         res = requests.get(api_url, headers=self.headers)
         data = res.json()
         if res.status_code == 200:

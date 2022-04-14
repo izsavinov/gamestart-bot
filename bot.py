@@ -37,7 +37,7 @@ async def reminder(ctx, message: str):
     except:
         pass
     deltadate = (date.day * 24 * 3600 + date.hour * 3600 + date.minute * 60 + date.second) - (time_now.day * 24 * 3600 \
-                                                                                              + time_now.hour * 3600 + time_now.minute * 60 + time_now.second)
+                                                 + time_now.hour * 3600 + time_now.minute * 60 + time_now.second)
     if (deltadate - 15 * 60 > 0):
         await asyncio.sleep(deltadate - 15 * 60 + 2)
         await ctx.send('15 минут')
@@ -61,7 +61,7 @@ async def getnickfi(ctx, message1: str, message2: str):
 async def statistica(ctx):
     """Выводит статистику"""
     statsdata_obj = statsdata(config['APIID'], config['url_base'])
-    player_id = statsdata.player_details(statsdata_obj, nickFI, nickSteam)
+    player_id = statsdata.player_details(statsdata_obj, nickFI)
     for i in range(0, len(player_id)):
         await ctx.send(player_id[i])
 
