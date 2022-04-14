@@ -47,11 +47,12 @@ async def reminder(ctx, message: str):
 
 @client.command(pass_context=True)
 async def getnickfi(ctx, message1: str):
-    """Пользователь предоставляет нам информацию о своем аккаунте FACEIT, а именно - никнейм
-    Пользователь предоставляет нам информацию о своем аккаунте Steam, а именно - никнейм"""
+    """
+        Пользователь предоставляет нам информацию о своем аккаунте FACEIT, а именно - никнейм
+    """
     global nickFI
     nickFI = message1
-    await ctx.send('{} и {}'.format(nickFI))
+    await ctx.send('{}'.format(nickFI))
 
 
 @client.command(pass_context=True)
