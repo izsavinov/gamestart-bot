@@ -7,7 +7,6 @@ from sys import argv
 from config import Config
 
 nickFI = ''
-nickSteam = ''
 
 config = Config(argv[1]).config
 client = commands.Bot(command_prefix=config['prefix'])
@@ -47,14 +46,12 @@ async def reminder(ctx, message: str):
 
 
 @client.command(pass_context=True)
-async def getnickfi(ctx, message1: str, message2: str):
+async def getnickfi(ctx, message1: str):
     """Пользователь предоставляет нам информацию о своем аккаунте FACEIT, а именно - никнейм
     Пользователь предоставляет нам информацию о своем аккаунте Steam, а именно - никнейм"""
     global nickFI
-    global nickSteam
     nickFI = message1
-    nickSteam = message2
-    await ctx.send('{} и {}'.format(nickFI, nickSteam))
+    await ctx.send('{} и {}'.format(nickFI))
 
 
 @client.command(pass_context=True)
