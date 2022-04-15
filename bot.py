@@ -52,9 +52,6 @@ async def getnickfi(ctx, nickFI: str):
     """
         Пользователь предоставляет нам информацию о своем аккаунте FACEIT, а именно - никнейм
     """
-    await ctx.send('{}'.format(nickFI))
-    await ctx.send(ctx.author.id)
-    await ctx.send(ctx.guild.id)
     # Получим player_id
     headers = {
         'accept': 'application/json',
@@ -67,7 +64,6 @@ async def getnickfi(ctx, nickFI: str):
 
     if res.status_code == 200:
         player_id = data["player_id"]
-        await ctx.send(player_id)
         with sqlite3.connect('PlayersID.db') as db:
             cursor = db.cursor()
             cursor.execute("""INSERT INTO PlayersID (ID_discord, nickFI, player_id, ID_chanell_discord) VALUES(?,?,?,?)""", ctx.author.id, nickFI, player_id, ctx.guild.id)
