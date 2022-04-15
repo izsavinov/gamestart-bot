@@ -62,6 +62,7 @@ async def getnickfi(ctx, nickFI: str):
     api_url += "?nickname={}".format(nickFI)
     res = requests.get(api_url, headers=headers)
     data = res.json()
+
     if res.status_code == 200:
         player_id = data["player_id"]
         with sqlite3.connect('PlayersID.db') as db:
@@ -71,7 +72,7 @@ async def getnickfi(ctx, nickFI: str):
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
             for res in cursor:
-                ctx.send(res)
+                await ctx.send(res)
     else:
         await ctx.send('Такого никнейма в FACEIT не найдено')
 
