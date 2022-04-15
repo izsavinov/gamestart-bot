@@ -53,6 +53,8 @@ async def getnickfi(ctx, nickFI: str):
         Пользователь предоставляет нам информацию о своем аккаунте FACEIT, а именно - никнейм
     """
     await ctx.send('{}'.format(nickFI))
+    await ctx.send(ctx.author.id)
+    await ctx.send(ctx.guild.id)
     # Получим player_id
     headers = {
         'accept': 'application/json',
