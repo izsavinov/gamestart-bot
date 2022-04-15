@@ -70,12 +70,11 @@ async def getnickfi(ctx, nickFI: str):
         await ctx.send(player_id)
         with sqlite3.connect('PlayersID.db') as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO PlayersID VALUES(?,?,?,?)", ctx.author.id, nickFI, player_id, ctx.guild.id)
-            db.commit()
+            cursor.execute("""INSERT INTO PlayersID (ID_discord, nickFI, player_id, ID_chanell_discord) VALUES(?,?,?,?)""", ctx.author.id, nickFI, player_id, ctx.guild.id)
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
-            for res in cursor:
-                await ctx.send(res)
+            print(cursor.fetchone())
+            db.commit()
     else:
         await ctx.send('Такого никнейма в FACEIT не найдено')
 
