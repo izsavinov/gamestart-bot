@@ -2,14 +2,16 @@ from discord.ext import commands
 import datetime
 import asyncio
 from bot_classes import statsdata
-from os import environ
 from sys import argv
 from config import Config
+import sqlite3
+import requests
 
 nickFI = ''
 
 config = Config(argv[1]).config
 client = commands.Bot(command_prefix=config['prefix'])
+url_base = config['url_base']
 
 
 @client.event
@@ -46,13 +48,34 @@ async def reminder(ctx, message: str):
 
 
 @client.command(pass_context=True)
-async def getnickfi(ctx, message1: str):
+async def getnickfi(ctx, nickFI: str):
     """
         Пользователь предоставляет нам информацию о своем аккаунте FACEIT, а именно - никнейм
     """
-    global nickFI
-    nickFI = message1
     await ctx.send('{}'.format(nickFI))
+    # Получим player_id
+    headers = {
+        'accept': 'application/json',
+        'Authorization': 'Bearer {}'.format(config['APIID'])
+    }
+    api_url = "{}/players".format(url_base)
+    api_url += "?nickname={}".format(nickFI)
+    res = requests.get(api_url, headers=headers)
+    data = res.json()
+    if res.status_code == 200:
+        player_id = data["player_id"]
+        with sqlite3.connect('PlayersID.db') as db:
+            cursor = db.cursor()
+            cursor.execute("INSERT INTO PlayersID VALUES(?,?,?,?)", ctx.author.id, nickFI, player_id, ctx.guild.id)
+            db.commit()
+            query = """ SELECT * FROM PlayersID """
+            cursor.execute(query)
+            for res in cursor:
+                ctx.send(res)
+    else:
+        await ctx.send('Такого никнейма в FACEIT не найдено')
+
+
 
 
 @client.command(pass_context=True)
