@@ -69,7 +69,7 @@ async def getnickfi(ctx, nickFI: str):
             cursor.execute("""INSERT INTO PlayersID (ID_discord, nickFI, player_id, ID_chanell_discord) VALUES(?,?,?,?)""", ctx.author.id, nickFI, player_id, ctx.guild.id)
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
-            print(cursor.fetchone())
+            await ctx.send(cursor.fetchone())
             db.commit()
     else:
         await ctx.send('Такого никнейма в FACEIT не найдено')
