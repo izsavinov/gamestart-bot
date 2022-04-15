@@ -2,11 +2,11 @@ from discord.ext import commands
 import datetime
 import asyncio
 from bot_classes import statsdata
-from os import environ
 from sys import argv
 from config import Config
+import database
 
-nickFI = ''
+database.sql_table()
 
 config = Config(argv[1]).config
 client = commands.Bot(command_prefix=config['prefix'])
@@ -46,20 +46,19 @@ async def reminder(ctx, message: str):
 
 
 @client.command(pass_context=True)
-async def getnickfi(ctx, message1: str):
+async def getnickfi(ctx, NickFI: str):
     """
         Пользователь предоставляет нам информацию о своем аккаунте FACEIT, а именно - никнейм
     """
-    global nickFI
-    nickFI = message1
-    await ctx.send('{}'.format(nickFI))
+    await ctx.send('{}'.format(NickFI))
+    return NickFI
 
 
 @client.command(pass_context=True)
 async def statistica(ctx):
     """Выводит статистику"""
     statsdata_obj = statsdata(config['APIID'], config['url_base'])
-    player_id = statsdata.player_details(statsdata_obj, nickFI)
+    player_id = statsdata.player_details(statsdata_obj)
     for i in range(0, len(player_id)):
         await ctx.send(player_id[i])
 
