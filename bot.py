@@ -1,12 +1,12 @@
 from discord.ext import commands
 import datetime
 import asyncio
+import psycopg2
+import database
 from bot_classes import statsdata
 from sys import argv
 from config import Config
-import sqlite3
 import requests
-
 nickFI = ''
 
 config = Config(argv[1]).config
@@ -61,18 +61,22 @@ async def getnickfi(ctx, nickFI: str):
     api_url += "?nickname={}".format(nickFI)
     res = requests.get(api_url, headers=headers)
     data = res.json()
+    conn = database.create_connection(config["db_name"], config["db_user"], config["db_password"], config["db_host"],
+                                      config["db_port"])
+    if (conn == None):
 
-    if res.status_code == 200:
-        player_id = data["player_id"]
-        with sqlite3.connect('PlayersID.db') as db:
-            cursor = db.cursor()
+        if res.status_code == 200:
+            player_id = data["player_id"]
+            conn.autocommit = True
+            cursor = conn.cursor()
             cursor.execute("""INSERT INTO PlayersID (ID_discord, nickFI, player_id, ID_chanell_discord) VALUES(?,?,?,?)""", ctx.author.id, nickFI, player_id, ctx.guild.id)
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
             await ctx.send(cursor.fetchone())
-            db.commit()
+        else:
+            await ctx.send('Такого никнейма в FACEIT не найдено')
     else:
-        await ctx.send('Такого никнейма в FACEIT не найдено')
+        await ctx.send('Неполадки с базой данных')
 
 
 

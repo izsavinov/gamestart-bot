@@ -1,8 +1,17 @@
-import sqlite3
+import psycopg2
+from psycopg2 import OperationalError
 
-def sql_table():
-    with sqlite3.connect('playersID.db') as conn:
-        cursor = conn.cursor()
-        query = """ CREATE TABLE IF NOT EXISTS expenses(ID_discord TEXT, nickFI TEXT, player_id TEXT, ID_chanell_discord) """
-        cursor.execute(query)
+def create_connection(db_name, db_user, db_password, db_host, db_port):
+    connection = None
+    try:
+        connection = psycopg2.connect(
+            database = db_name,
+            user = db_user,
+            password = db_password,
+            host = db_host,
+            port = db_port  )
+        print("Connection to PostgreSQL DB successful")
+    except OperationalError as e:
+        print(f"The error '{e}' occurred")
+    return connection
 
