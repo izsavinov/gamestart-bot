@@ -1,7 +1,6 @@
 from discord.ext import commands
 import datetime
 import asyncio
-import psycopg2
 import database
 from bot_classes import statsdata
 from sys import argv
