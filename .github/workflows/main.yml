@@ -25,12 +25,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Heroku Action
-        uses: CDNievas/heroku-action@v1.0
+      - name: Deploy to Heroku
+        uses: AkhileshNS/heroku-deploy@v3.12.12
         with:
           # Used for authentication. You can find it in your heroku homepage account settings
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           # Email from Heroku Account
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
           # The appname to use for deploying/updating
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
