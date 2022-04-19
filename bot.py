@@ -62,7 +62,7 @@ async def getnickfi(ctx, nickFI: str):
     data = res.json()
     conn = database.create_connection(config["db_name"], config["db_user"], config["db_password"], config["db_host"],
                                       config["db_port"])
-    if (conn == None):
+    if (conn):
 
         if res.status_code == 200:
             player_id = data["player_id"]
