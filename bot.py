@@ -50,7 +50,7 @@ async def reminder(ctx, message: str):
     except:
         pass
     # Добавляем 3 часа из-за европейского времени
-    deltadate = (date.day * 24 * 3600 + date.hour * 3600 + date.minute * 60 + date.second + 3 * 3600) - (
+    deltadate = (date.day * 24 * 3600 + date.hour * 3600 + date.minute * 60 - date.second + 3 * 3600) - (
                 time_now.day * 24 * 3600
                 + time_now.hour * 3600 + time_now.minute * 60 + time_now.second)
     if (deltadate - 15 * 60 > 0):
