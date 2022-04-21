@@ -1,12 +1,27 @@
 from discord.ext import commands
 import datetime
+from datetime import timedelta
 import asyncio
 import database
 from bot_classes import statsdata
 from sys import argv
 from config import Config
 import requests
-nickFI = ''
+
+import psycopg2
+from psycopg2 import OperationalError
+
+connection = None
+try:
+    connection = psycopg2.connect(
+        database="d6t05qho73cje8",
+        user="wwizoojruedcgc",
+        password="b3196f53147103f61242e5f3edac45c708d0458a63cde4089da48713407219a6",
+        host="ec2-63-32-248-14.eu-west-1.compute.amazonaws.com",
+        port=5432)
+    print("Connection to PostgreSQL DB successful")
+except OperationalError as e:
+    print(f"The error '{e}' occurred")
 
 config = Config(argv[1]).config
 client = commands.Bot(command_prefix=config['prefix'])
@@ -36,10 +51,10 @@ async def reminder(ctx, message: str):
         date = datetime.datetime.strptime(gamedata, datepattern)
     except:
         pass
-    deltadate = (date.day * 24 * 3600 + date.hour * 3600 + date.minute * 60 + date.second) - (time_now.day * 24 * 3600 \
-                                                 + time_now.hour * 3600 + time_now.minute * 60 + time_now.second)
-    if (deltadate - 15 * 60 > 0):
-        await asyncio.sleep(deltadate - 15 * 60 + 2)
+    deltadate = timedelta(days=date.day, hours=date.hour, minutes=date.minute, seconds=date.second) - timedelta(
+        days=time_now.day, hours=time_now.hour, minutes=time_now.minute, seconds=time_now.second)
+    if (deltadate - timedelta(minutes=15) > 0):
+        await asyncio.sleep(deltadate - timedelta(minutes=15, seconds=2))
         await ctx.send('15 минут')
     else:
         await asyncio.sleep(deltadate)
@@ -68,23 +83,22 @@ async def getnickfi(ctx, nickFI: str):
             player_id = data["player_id"]
             conn.autocommit = True
             cursor = conn.cursor()
-            cursor.execute("""INSERT INTO PlayersID (ID_discord, nickFI, player_id, ID_chanell_discord) VALUES(?,?,?,?)""", ctx.author.id, nickFI, player_id, ctx.guild.id)
+            cursor.execute("""INSERT INTO PlayersID (ID_discord, player_id, ID_chanell_discord) VALUES(?,?,?)""",
+                           ctx.author.id, player_id, ctx.guild.id)
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
-            await ctx.send(cursor.fetchone())
+            await ctx.send(cursor.fetchall())
         else:
             await ctx.send('Такого никнейма в FACEIT не найдено')
     else:
         await ctx.send('Неполадки с базой данных')
 
 
-
-
 @client.command(pass_context=True)
 async def statistica(ctx):
     """Выводит статистику"""
     statsdata_obj = statsdata(config['APIID'], config['url_base'])
-    player_id = statsdata.player_details(statsdata_obj, nickFI)
+    player_id = statsdata.player_details(statsdata_obj)
     for i in range(0, len(player_id)):
         await ctx.send(player_id[i])
 
