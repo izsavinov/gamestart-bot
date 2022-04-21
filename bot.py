@@ -1,6 +1,5 @@
 from discord.ext import commands
 import datetime
-from datetime import timedelta
 import asyncio
 import database
 from bot_classes import statsdata
@@ -51,10 +50,10 @@ async def reminder(ctx, message: str):
         date = datetime.datetime.strptime(gamedata, datepattern)
     except:
         pass
-    deltadate = timedelta(days=date.day, hours=date.hour, minutes=date.minute, seconds=date.second) - timedelta(
-        days=time_now.day, hours=time_now.hour, minutes=time_now.minute, seconds=time_now.second)
-    if (deltadate - timedelta(minutes=15) > 0):
-        await asyncio.sleep(deltadate - timedelta(minutes=15, seconds=2))
+    deltadate = (date.day * 24 * 3600 + date.hour * 3600 + date.minute * 60 + date.second) - (time_now.day * 24 * 3600
+                                                                                              + time_now.hour * 3600 + time_now.minute * 60 + time_now.second)
+    if (deltadate - 15 * 60 > 0):
+        await asyncio.sleep(deltadate - 15 * 60 + 2)
         await ctx.send('15 минут')
     else:
         await asyncio.sleep(deltadate)
