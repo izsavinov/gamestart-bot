@@ -6,7 +6,6 @@ from bot_classes import statsdata
 from sys import argv
 from config import Config
 import requests
-
 import psycopg2
 from psycopg2 import OperationalError
 
@@ -50,8 +49,10 @@ async def reminder(ctx, message: str):
         date = datetime.datetime.strptime(gamedata, datepattern)
     except:
         pass
-    deltadate = (date.day * 24 * 3600 + date.hour * 3600 + date.minute * 60 + date.second) - (time_now.day * 24 * 3600 \
-                                                                                              + time_now.hour * 3600 + time_now.minute * 60 + time_now.second)
+    # Добавляем 3 часа из-за европейского времени
+    deltadate = (date.day * 24 * 3600 + date.hour * 3600 + date.minute * 60 + date.second + 3 * 3600) - (
+                time_now.day * 24 * 3600
+                + time_now.hour * 3600 + time_now.minute * 60 + time_now.second)
     if (deltadate - 15 * 60 > 0):
         await asyncio.sleep(deltadate - 15 * 60 + 2)
         await ctx.send('15 минут')
