@@ -56,7 +56,7 @@ async def reminder(ctx, message: str):
     if (deltadate - 15 * 60 > 0):
         await asyncio.sleep(deltadate - 15 * 60 + 2)
         await ctx.send('15 минут')
-    elif(deltadate < 0):
+    elif(deltadate > 0):
         await asyncio.sleep(deltadate)
         await ctx.send('Start')
 
