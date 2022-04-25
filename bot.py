@@ -77,7 +77,18 @@ async def getnickfi(ctx, nickFI: str):
     data = res.json()
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
-    if (conn):
+    connection = None
+    try:
+        connection = psycopg2.connect(
+            database=config['db_name'],
+            user=config['db_user'],
+            password=config['db_password'],
+            host=config['db_host'],
+            port=config['db_port'])
+        print("Connection to PostgreSQL DB successful")
+    except OperationalError as e:
+        print(f"The error '{e}' occurred")
+    if (connection):
 
         if res.status_code == 200:
             player_id = data["player_id"]
