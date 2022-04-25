@@ -75,8 +75,8 @@ async def getnickfi(ctx, nickFI: str):
     api_url += "?nickname={}".format(nickFI)
     res = requests.get(api_url, headers=headers)
     data = res.json()
-    conn = database.create_connection(config["db_name"], config["db_user"], config["db_password"], config["db_host"],
-                                      config["db_port"])
+    conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
+                                      config['db_port'])
     if (conn):
 
         if res.status_code == 200:
