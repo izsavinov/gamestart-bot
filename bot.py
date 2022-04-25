@@ -90,7 +90,7 @@ async def getnickfi(ctx, nickFI: str):
         print(f"The error '{e}' occurred")
     if (connection):
 
-        if res.status_code == 200:
+        if (res.status_code == 200):
             player_id = data["player_id"]
             conn.autocommit = True
             cursor = conn.cursor()
