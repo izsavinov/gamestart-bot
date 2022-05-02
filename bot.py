@@ -89,7 +89,9 @@ async def getnickfi(ctx, nickFI: str):
                            ctx.author.id, player_id, ctx.guild.id)
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
-            await ctx.send(cursor.fetchall())
+            massive = cursor.fetchall()
+            for i in range(len(massive)):
+                await ctx.send(massive[i])
         else:
             await ctx.send('Такого никнейма в FACEIT не найдено')
     else:
