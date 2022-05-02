@@ -79,7 +79,7 @@ async def getnickfi(ctx, nickFI: str):
                                       config['db_port'])
 
     if (conn):
-
+        await ctx.send('подключен')
         if (res.status_code == 200):
             player_id = data["player_id"]
             conn.autocommit = True
@@ -88,7 +88,6 @@ async def getnickfi(ctx, nickFI: str):
                            ctx.author.id, player_id, ctx.guild.id)
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
-            await ctx.send('Успешно подключился к базе данных')
             await ctx.send(cursor.fetchall())
         else:
             await ctx.send('Такого никнейма в FACEIT не найдено')
