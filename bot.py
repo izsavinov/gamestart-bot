@@ -77,21 +77,26 @@ async def getnickfi(ctx, nickFI: str):
     data = res.json()
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
-
+    cursor = conn.cursor()
+    cursor.execute("""CREATE TABLE PlayersID 
+            (ID_discord TEXT,
+            player_id TEXT,
+            ID_chanell_discord TEXT);""")
     if (conn):
         await ctx.send('подключен')
         if (res.status_code == 200):
             await ctx.send('код==200')
             player_id = data["player_id"]
             conn.autocommit = True
-            cursor = conn.cursor()
             cursor.execute("""INSERT INTO PlayersID (ID_discord, player_id, ID_chanell_discord) VALUES(?,?,?)""",
-                           ctx.author.id, player_id, ctx.guild.id)
+                           (ctx.author.id, player_id, ctx.guild.id))
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
             massive = cursor.fetchall()
             for i in range(len(massive)):
                 await ctx.send(massive[i])
+            cursor.close()
+            conn.close()
         else:
             await ctx.send('Такого никнейма в FACEIT не найдено')
     else:
