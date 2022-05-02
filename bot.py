@@ -95,6 +95,7 @@ async def getnickfi(ctx, nickFI: str):
             massive = cursor.fetchall()
             for i in range(len(massive)):
                 await ctx.send(massive[i])
+            await ctx.send('.')
             cursor.close()
             conn.close()
         else:
