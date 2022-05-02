@@ -81,6 +81,7 @@ async def getnickfi(ctx, nickFI: str):
     if (conn):
         await ctx.send('подключен')
         if (res.status_code == 200):
+            await ctx.send('код==200')
             player_id = data["player_id"]
             conn.autocommit = True
             cursor = conn.cursor()
