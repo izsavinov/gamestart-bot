@@ -78,10 +78,6 @@ async def getnickfi(ctx, nickFI: str):
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
-    cursor.execute("""CREATE TABLE PlayersID 
-            (ID_discord TEXT,
-            player_id TEXT,
-            ID_chanell_discord TEXT);""")
     if (conn):
         await ctx.send('подключен')
         if (res.status_code == 200):
@@ -89,8 +85,8 @@ async def getnickfi(ctx, nickFI: str):
             player_id = data["player_id"]
             await ctx.send('.')
             conn.autocommit = True
-            cursor.execute("""INSERT INTO PlayersID (ID_discord, player_id, ID_chanell_discord) VALUES(?,?,?)""",
-                           (ctx.author.id, player_id, ctx.guild.id))
+            cursor.execute("""INSERT INTO PlayersID (ID_chanell_discord, ID_discord, player_id) VALUES(?,?,?)""",
+                           (ctx.guild.id, ctx.author.id, player_id))
             await ctx.send('..')
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
