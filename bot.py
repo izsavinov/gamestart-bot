@@ -73,12 +73,15 @@ async def getnickfi(ctx, nickFI: str):
     }
     api_url = "{}/players".format(url_base)
     api_url += "?nickname={}".format(nickFI)
+    await ctx.send('1')
     res = requests.get(api_url, headers=headers)
     data = res.json()
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
+    await ctx.send('2')
     cursor = conn.cursor()
     cursor.execute("CREATE TABLE PlayersID IF NOT EXISTS (ID_chanell_discord TEXT, ID_discord TEXT, player_id TEXT);")
+    await ctx.send('3')
     if (conn):
         await ctx.send('подключен')
         if (res.status_code == 200):
