@@ -87,6 +87,7 @@ async def getnickfi(ctx, nickFI: str):
         if (res.status_code == 200):
             await ctx.send('код==200')
             player_id = data["player_id"]
+            await ctx.send('.')
             conn.autocommit = True
             cursor.execute("""INSERT INTO PlayersID (ID_discord, player_id, ID_chanell_discord) VALUES(?,?,?)""",
                            (ctx.author.id, player_id, ctx.guild.id))
