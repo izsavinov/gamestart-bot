@@ -78,6 +78,7 @@ async def getnickfi(ctx, nickFI: str):
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
+    cursor.execute("CREATE TABLE PlayersID IF NOT EXISTS (ID_chanell_discord TEXT, ID_discord TEXT, player_id TEXT);")
     if (conn):
         await ctx.send('подключен')
         if (res.status_code == 200):
