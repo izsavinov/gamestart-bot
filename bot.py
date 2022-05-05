@@ -84,8 +84,11 @@ async def getnickfi(ctx, nickFI: str):
             await ctx.send('код==200')
             player_id = data["player_id"]
             await ctx.send('.')
-            cursor.execute("INSERT INTO PlayersID (ID_chanell_discord, ID_discord, player_id) VALUES(?, ?, ?)",
-                           (ctx.guild.id, ctx.author.id, player_id))
+            try:
+                cursor.execute("INSERT INTO PlayersID (ID_chanell_discord, ID_discord, player_id) VALUES(?, ?, ?)",
+                               (ctx.guild.id, ctx.author.id, player_id))
+            except psycopg2.Error as err:
+                await ctx.send(err)
             conn.commit()
             await ctx.send('..')
             query = " SELECT * FROM PlayersID "
