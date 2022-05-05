@@ -90,12 +90,14 @@ async def getnickfi(ctx, nickFI: str):
             conn.autocommit = True
             cursor.execute("""INSERT INTO PlayersID (ID_discord, player_id, ID_chanell_discord) VALUES(?,?,?)""",
                            (ctx.author.id, player_id, ctx.guild.id))
+            await ctx.send('..')
             query = """ SELECT * FROM PlayersID """
             cursor.execute(query)
+            await ctx.send('...')
             massive = cursor.fetchall()
             for i in range(len(massive)):
                 await ctx.send(massive[i])
-            await ctx.send('.')
+            await ctx.send('....')
             cursor.close()
             conn.close()
         else:
