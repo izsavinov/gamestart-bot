@@ -80,7 +80,10 @@ async def getnickfi(ctx, nickFI: str):
                                       config['db_port'])
     await ctx.send('2')
     cursor = conn.cursor()
-    cursor.execute("CREATE TABLE PlayersID IF NOT EXISTS (ID_chanell_discord text, ID_discord text, player_id text);")
+    try:
+        cursor.execute("CREATE TABLE PlayersID IF NOT EXISTS (ID_chanell_discord text, ID_discord text, player_id text);")
+    except psycopg2.Error as err:
+        await ctx.send(err)
     await ctx.send('3')
     if (conn):
         await ctx.send('подключен')
