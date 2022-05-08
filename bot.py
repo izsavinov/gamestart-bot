@@ -89,7 +89,7 @@ async def getnickfi(ctx, nickFI: str):
             except psycopg2.Error as err:
                 await ctx.send(err)
             found_users = cursor.fetchall()
-            if(found_users):
+            if(found_users == None):
                 try:
                     cursor.execute("""INSERT INTO PlayersID (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""", (ctx.guild.id, ctx.author.id, player_id))
                 except psycopg2.Error as err:
