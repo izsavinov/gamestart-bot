@@ -73,24 +73,16 @@ async def getnickfi(ctx, nickFI: str):
     }
     api_url = "{}/players".format(url_base)
     api_url += "?nickname={}".format(nickFI)
-    await ctx.send('1')
     res = requests.get(api_url, headers=headers)
     data = res.json()
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
-    await ctx.send('2')
     cursor = conn.cursor()
-    try:
-        cursor.execute("CREATE TABLE PlayersID (ID_chanell_discord text, ID_discord text, player_id text);")
-    except psycopg2.Error as err:
-        await ctx.send(err)
-    await ctx.send('3')
     if (conn):
         await ctx.send('подключен')
         if (res.status_code == 200):
             await ctx.send('код==200')
             player_id = data["player_id"]
-            await ctx.send('.')
             try:
                 cursor.execute("""INSERT INTO PlayersID (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""", (ctx.guild.id, ctx.author.id, player_id))
             except psycopg2.Error as err:
