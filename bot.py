@@ -84,7 +84,10 @@ async def getnickfi(ctx, nickFI: str):
             query = """ SELECT id_chanell_discord, player_id 
                         FROM playersid 
                         WHERE id_chanell_discord = %s AND player_id = %s"""
-            cursor.execute(query,(ctx.guild.id,player_id))
+            try:
+                cursor.execute(query, (ctx.guild.id,player_id))
+            except psycopg2.Error as err:
+                await ctx.send(err)
             found_users = cursor.fetchall()
             if(found_users):
                 try:
