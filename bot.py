@@ -81,7 +81,7 @@ async def getnickfi(ctx, nickFI: str):
     await ctx.send('2')
     cursor = conn.cursor()
     try:
-        cursor.execute("CREATE TABLE PlayersID IF NOT EXISTS (ID_chanell_discord text, ID_discord text, player_id text);")
+        cursor.execute("CREATE TABLE PlayersID (ID_chanell_discord text, ID_discord text, player_id text);")
     except psycopg2.Error as err:
         await ctx.send(err)
     await ctx.send('3')
