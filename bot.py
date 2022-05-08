@@ -79,25 +79,29 @@ async def getnickfi(ctx, nickFI: str):
                                       config['db_port'])
     cursor = conn.cursor()
     if (conn):
-        await ctx.send('подключен')
         if (res.status_code == 200):
-            await ctx.send('код==200')
             player_id = data["player_id"]
-            try:
-                cursor.execute("""INSERT INTO PlayersID (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""", (ctx.guild.id, ctx.author.id, player_id))
-            except psycopg2.Error as err:
-                await ctx.send(err)
-            conn.commit()
-            await ctx.send('..')
+            query = """ SELECT id_chanell_discord, player_id 
+                        FROM playersid 
+                        WHERE id_chanell_discord = %s AND player_id = %s"""
+            cursor.execute(query,(ctx.guild.id,player_id))
+            found_users = cursor.fetchall()
+            if(found_users):
+                try:
+                    cursor.execute("""INSERT INTO PlayersID (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""", (ctx.guild.id, ctx.author.id, player_id))
+                except psycopg2.Error as err:
+                    await ctx.send(err)
+                conn.commit()
+            else:
+                await ctx.send('Вы уже регистрировались!')
             query = " SELECT * FROM PlayersID "
             cursor.execute(query)
-            await ctx.send('...')
             massive = cursor.fetchall()
             for i in range(len(massive)):
                 await ctx.send(massive[i])
-            await ctx.send('!!!11')
             cursor.close()
             conn.close()
+
         else:
             await ctx.send('Такого никнейма в FACEIT не найдено')
     else:
