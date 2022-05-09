@@ -151,7 +151,7 @@ async def delete_database_entries(ctx):
             cursor.execute(query, str(ctx.guild.id))
             await ctx.send("Записи успешно удалены")
         except psycopg2.Error as err:
-            await ctx.send("Не удалось удалить записи из бд")
+            await ctx.send(err)
     else:
         await ctx.send("Не удалось подключиться к бд")
 
