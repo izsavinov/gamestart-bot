@@ -145,6 +145,7 @@ async def delete_database_entries(ctx):
     if (conn):
         try:
             cursor.execute(query)
+            await ctx.send("Записи успешно удалены")
         except psycopg2.Error as err:
             await ctx.send("Не удалось удалить записи из бд")
     else:
