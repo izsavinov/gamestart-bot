@@ -7,19 +7,6 @@ from sys import argv
 from config import Config
 import requests
 import psycopg2
-from psycopg2 import OperationalError
-
-connection = None
-try:
-    connection = psycopg2.connect(
-        database="d6t05qho73cje8",
-        user="wwizoojruedcgc",
-        password="b3196f53147103f61242e5f3edac45c708d0458a63cde4089da48713407219a6",
-        host="ec2-63-32-248-14.eu-west-1.compute.amazonaws.com",
-        port=5432)
-    print("Connection to PostgreSQL DB successful")
-except OperationalError as e:
-    print(f"The error '{e}' occurred")
 
 config = Config(argv[1]).config
 client = commands.Bot(command_prefix=config['prefix'])
@@ -82,21 +69,24 @@ async def getnickfi(ctx, nickFI: str):
         if (res.status_code == 200):
             player_id = data["player_id"]
             query = """ SELECT id_chanell_discord, player_id 
-                        FROM playersid 
-                        WHERE id_chanell_discord = %s AND player_id = %s"""
+                        FROM PlayersID 
+                        WHERE id_chanell_discord = %s AND ID_discord = %s"""
             try:
-                cursor.execute(query, (str(ctx.guild.id), str(player_id)))
+                cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
             except psycopg2.Error as err:
                 await ctx.send(err)
             found_users = cursor.fetchall()
-            if(found_users == None):
+            if (found_users == None):
                 try:
-                    cursor.execute("""INSERT INTO PlayersID (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""", (ctx.guild.id, ctx.author.id, player_id))
+                    cursor.execute(
+                        """INSERT INTO PlayersID (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""",
+                        (ctx.guild.id, ctx.author.id, player_id))
                 except psycopg2.Error as err:
                     await ctx.send(err)
                 conn.commit()
             else:
-                await ctx.send('Вы уже регистрировались!')
+                await ctx.send(
+                    'Вы уже регистрировались на этом канале! Можете удалить свой аккаунт командой !!! и поменять аккаунт')
             query = " SELECT * FROM PlayersID "
             cursor.execute(query)
             massive = cursor.fetchall()
@@ -114,10 +104,51 @@ async def getnickfi(ctx, nickFI: str):
 @client.command(pass_context=True)
 async def statistica(ctx):
     """Выводит статистику"""
-    statsdata_obj = statsdata(config['APIID'], config['url_base'])
-    player_id = statsdata.player_details(statsdata_obj)
-    for i in range(0, len(player_id)):
-        await ctx.send(player_id[i])
+    conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
+                                      config['db_port'])
+    cursor = conn.cursor()
+    # Получим player_id всех игроков из выбранного канала в дискорде
+    query = """SELECT player_id
+               FROM PlayersID
+               WHERE id_chanell_discord = %s"""
+    try:
+        cursor.execute(query, (str(ctx.guild.id)))
+    except psycopg2.Error as err:
+        await ctx.send("Не удалось подключиться к базе данных")
+    found_playersid = cursor.fetchall()
+
+    # Получим player_id игрока, который вызвал команду .statistica
+    query = """SELECT player_id
+                   FROM PlayersID
+                   WHERE id_chanell_discord = %s AND ID_discord = %s"""
+    try:
+        cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
+    except psycopg2.Error as err:
+        await ctx.send("Не удалось подключиться к базе данных")
+    found_playerid = cursor.fetchall()
+
+    if (found_playersid):
+        statsdata_obj = statsdata(config['APIID'], config['url_base'])
+        player_id = statsdata.player_details(statsdata_obj, found_playerid, found_playersid)
+        for i in range(0, len(player_id)):
+            await ctx.send(player_id[i])
+    else:
+        await ctx.send('Вы не регистрировали свой аккаунт')
+
+
+@client.command(pass_context=True)
+async def delete_database_entries(ctx):
+    conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
+                                      config['db_port'])
+    cursor = conn.cursor()
+    query = """TRUNCATE TABLE PlayersID"""
+    if (conn):
+        try:
+            cursor.execute(query)
+        except psycopg2.Error as err:
+            await ctx.send("Не удалось удалить записи из бд")
+    else:
+        await ctx.send("Не удалось подключиться к бд")
 
 
 client.run(config['TOKEN'])

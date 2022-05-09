@@ -1,8 +1,12 @@
 import requests
 from config import Config
 from sys import argv
+import database
+import psycopg2
+from psycopg2 import OperationalError
 
 config = Config(argv[1]).config
+
 
 class statsdata:
     """Данные полученные с помощью API FACEIT"""
@@ -19,21 +23,10 @@ class statsdata:
             'Authorization': 'Bearer {}'.format(self.api_token)
         }
 
-    def player_details(self, nickname=None):
+    def player_details(self, player_id=None, massive_playerid=None):
         """В эту функцию передаем параметры nickname от аккаунта в FACEIT и game_player_id от аккаунта в CS:GO.
            Функция возвращает статистику последнего матча.
         """
-        # Получим player_id
-        api_url = "{}/players".format(self.base_url)
-        if nickname != None:
-            api_url += "?nickname={}".format(nickname)
-        res = requests.get(api_url, headers=self.headers)
-        data = res.json()
-        if res.status_code == 200:
-            player_id = data["player_id"]
-        else:
-            return None
-
         # Получим последний match_id
         api_url = "{}/players/{}/history".format(self.base_url, player_id)
         api_url += "?game={}&offset={}&limit={}".format(config["game"], 0, 1)
@@ -53,8 +46,8 @@ class statsdata:
         if response.status_code == 200:
             for team_index in range(0, 2):
                 for gamer_index in range(0, 5):
-                    nick = teams[team_index]["players"][gamer_index]["nickname"]  # никнейм с фэйсит
-                    if nick == nickname:
+                    playerid = teams[team_index]["players"][gamer_index]["player_id"]  # player_id с фэйсит
+                    if playerid in massive_playerid:
                         gamer_index_for_stats = teams[team_index]["players"][gamer_index]
                         counter += 1
                         kills = gamer_index_for_stats["player_stats"]["Kills"]
@@ -64,14 +57,10 @@ class statsdata:
                         MVPs = gamer_index_for_stats["player_stats"]['MVPs']
                         headshots = gamer_index_for_stats["player_stats"]['Headshots']
                         K_D_Ratio = gamer_index_for_stats["player_stats"]["K/D Ratio"]
-
-                        stata.append('Kills:' + kills)
-                        stata.append('Assists: ' + assists)
-                        stata.append('Death: ' + deaths)
-                        stata.append('K/R Ratio: ' + K_R_Ratio)
-                        stata.append('K/D Ratio: ' + K_D_Ratio)
-                        stata.append('MVPs: ' + MVPs)
-                        stata.append('Headshots: ' + headshots)
+                        nickname = teams[team_index]["players"][gamer_index]["nickname"]
+                        stata.append(
+                            nickname + ':\nKills:' + kills + '\nAssists: ' + assists + '\nDeath: ' + deaths + '\nK/R Ratio: ' + K_R_Ratio +
+                            '\nK/D Ratio: ' + K_D_Ratio + '\nMVPs: ' + MVPs + '\nHeadshots: ' + headshots)
                 if counter > -1:
                     break
         else:
