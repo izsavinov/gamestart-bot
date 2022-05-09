@@ -141,10 +141,11 @@ async def delete_database_entries(ctx):
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
-    query = """TRUNCATE TABLE PlayersID"""
+    query = """DELETE FROM PlayersID
+                WHERE id_chanell_discord = %s"""
     if (conn):
         try:
-            cursor.execute(query)
+            cursor.execute(query, str(ctx.guild.id))
             await ctx.send("Записи успешно удалены")
         except psycopg2.Error as err:
             await ctx.send("Не удалось удалить записи из бд")
