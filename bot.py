@@ -161,6 +161,7 @@ async def on_guild_join(guild):
     except Exception as e:
         await guild.text_chanells[0].send('На вашем сервере работает Gamestart! Чтобы изучить работу бота, введите команду .help')
 
+@client.command(pass_context=True)
 async def delete_my_account(ctx):
     """
         Удаляет аккаунт пользователя из базы данных
