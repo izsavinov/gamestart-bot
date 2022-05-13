@@ -112,7 +112,7 @@ async def statistica(ctx):
                FROM playersid
                WHERE id_chanell_discord = %s;"""
     try:
-        cursor.execute(query, (str(ctx.guild.id)))
+        cursor.execute(query, (str(ctx.guild.id),))
     except psycopg2.Error as err:
         await ctx.send("Не удалось подключиться к базе данных")
     found_playersid = cursor.fetchall()
