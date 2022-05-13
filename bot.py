@@ -86,7 +86,7 @@ async def getnickfi(ctx, nickFI: str):
                 conn.commit()
             else:
                 await ctx.send(
-                    'Вы уже регистрировались на этом канале! Можете удалить свой аккаунт командой !!! и поменять аккаунт')
+                    'Вы уже регистрировались на этом канале! Можете удалить свой аккаунт командой .delete_my_account и поменять аккаунт')
             query = " SELECT * FROM PlayersID "
             cursor.execute(query)
             massive = cursor.fetchall()
@@ -153,5 +153,31 @@ async def delete_database_entries(ctx):
     else:
         await ctx.send("Не удалось подключиться к бд")
 
+@client.event
+async def on_guild_join(guild):
+    try:
+        join_chanell = guild.system_chanell
+        await join_chanell.send('На вашем сервере работает Gamestart! Чтобы изучить работу бота, введите команду .help')
+    except Exception as e:
+        await guild.text_chanells[0].send('На вашем сервере работает Gamestart! Чтобы изучить работу бота, введите команду .help')
+
+async def delete_my_account(ctx):
+    """
+        Удаляет аккаунт пользователя из базы данных
+    """
+    conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
+                                      config['db_port'])
+    cursor = conn.cursor()
+    query = """DELETE FROM PlayersID
+                WHERE id_chanell_discord = %s AND id_discord = %s """
+    if (conn):
+        try:
+            await ctx.send('///')
+            cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
+            await ctx.send("Записи успешно удалены")
+        except psycopg2.Error as err:
+            await ctx.send(err)
+    else:
+        await ctx.send("Не удалось подключиться к бд")
 
 client.run(config['TOKEN'])
