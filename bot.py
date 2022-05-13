@@ -43,7 +43,7 @@ async def reminder(ctx, message: str):
     if (deltadate - 15 * 60 > 0):
         await asyncio.sleep(deltadate - 15 * 60 + 2)
         await ctx.send('15 минут')
-    elif (deltadate > 0):
+    if (deltadate > 0):
         await asyncio.sleep(deltadate)
         await ctx.send('Start')
 
@@ -143,11 +143,8 @@ async def delete_database_entries(ctx):
     cursor = conn.cursor()
     query = """DELETE FROM PlayersID
                 WHERE id_chanell_discord = %s"""
-    await ctx.send(".")
     if (conn):
-        await ctx.send("..")
         try:
-            await ctx.send("...")
             cursor.execute(query, str(ctx.guild.id))
             await ctx.send("Записи успешно удалены")
         except psycopg2.Error as err:
