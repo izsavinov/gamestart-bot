@@ -145,6 +145,7 @@ async def delete_database_entries(ctx):
                 WHERE id_chanell_discord = %s"""
     if (conn):
         try:
+            await ctx.send('///')
             cursor.execute(query, str(ctx.guild.id))
             await ctx.send("Записи успешно удалены")
         except psycopg2.Error as err:
