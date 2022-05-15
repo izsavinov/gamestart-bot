@@ -78,6 +78,7 @@ async def register(ctx, nickFI: str):
             except psycopg2.Error as err:
                 await ctx.send(err)
             found_users = cursor.fetchall()
+            await ctx.send(found_users)
             await ctx.send('1')
             if (found_users == None):
                 try:
