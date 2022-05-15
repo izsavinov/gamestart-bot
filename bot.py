@@ -69,7 +69,7 @@ async def getnickfi(ctx, nickFI: str):
         if (res.status_code == 200):
             player_id = data["player_id"]
             query = """ SELECT id_chanell_discord, player_id 
-                        FROM playersid 
+                        FROM player_data 
                         WHERE id_chanell_discord = %s AND ID_discord = %s;"""
             try:
                 cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
@@ -79,7 +79,7 @@ async def getnickfi(ctx, nickFI: str):
             if (found_users == None):
                 try:
                     cursor.execute(
-                        """INSERT INTO playersid (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""",
+                        """INSERT INTO player_data (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""",
                         (str(ctx.guild.id), str(ctx.author.id), str(player_id)))
                 except psycopg2.Error as err:
                     await ctx.send(err)
@@ -87,7 +87,7 @@ async def getnickfi(ctx, nickFI: str):
             else:
                 await ctx.send(
                     'Вы уже регистрировались на этом канале! Можете удалить свой аккаунт командой .delete_my_account и поменять аккаунт')
-            query = " SELECT * FROM playersid;"
+            query = " SELECT * FROM player_data;"
             cursor.execute(query)
             massive = cursor.fetchall()
             for i in range(len(massive)):
@@ -118,7 +118,7 @@ async def statistica(ctx):
     cursor = conn.cursor()
     # Получим player_id всех игроков из выбранного канала в дискорде
     query = """SELECT player_id
-               FROM playersid
+               FROM player_data
                WHERE id_chanell_discord = %s;"""
     try:
         await ctx.send('/')
@@ -130,7 +130,7 @@ async def statistica(ctx):
 
     # Получим player_id игрока, который вызвал команду .statistica
     query = """SELECT player_id
-                   FROM playersid
+                   FROM player_data
                    WHERE id_chanell_discord = %s AND ID_discord = %s;"""
     try:
         await ctx.send('///')
@@ -158,7 +158,7 @@ async def delete_database_entries(ctx):
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
-    query = """DELETE FROM playersid;"""
+    query = """DELETE FROM player_data;"""
     if (conn):
         try:
             await ctx.send('///')
@@ -186,7 +186,7 @@ async def delete_my_account(ctx):
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
-    query = """DELETE FROM playersid
+    query = """DELETE FROM player_data
                 WHERE id_chanell_discord = %s AND id_discord = %s;"""
     if (conn):
         try:
