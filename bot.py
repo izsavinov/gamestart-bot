@@ -102,6 +102,15 @@ async def getnickfi(ctx, nickFI: str):
 
 
 @client.command(pass_context=True)
+async def create_db(ctx):
+    conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
+                                      config['db_port'])
+    cursor = conn.cursor()
+    query = """CREATE TABLE player_data (ID_chanell_discord text, ID_discord text, player_id text);"""
+    cursor.execute(query)
+    await ctx.send("таблица создана")
+
+@client.command(pass_context=True)
 async def statistica(ctx):
     """Выводит статистику"""
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
