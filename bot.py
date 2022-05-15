@@ -136,7 +136,7 @@ async def statistica(ctx):
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
         await ctx.send('//////')
         player_id = statsdata.player_details(statsdata_obj, found_playerid, found_playersid)
-        await ctx.send('///////')
+        await ctx.send('////////')
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
     else:
