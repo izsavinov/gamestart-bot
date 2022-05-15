@@ -49,7 +49,7 @@ async def reminder(ctx, message: str):
 
 
 @client.command(pass_context=True)
-async def getnickfi(ctx, nickFI: str):
+async def register(ctx, nickFI: str):
     """
         Пользователь предоставляет нам информацию о своем аккаунте FACEIT, а именно - никнейм
     """
@@ -76,6 +76,7 @@ async def getnickfi(ctx, nickFI: str):
             except psycopg2.Error as err:
                 await ctx.send(err)
             found_users = cursor.fetchall()
+            await ctx.send
             if (found_users == None):
                 try:
                     cursor.execute(
@@ -84,23 +85,28 @@ async def getnickfi(ctx, nickFI: str):
                 except psycopg2.Error as err:
                     await ctx.send(err)
                 conn.commit()
+                await ctx.send('Успешно зарегистрированы!')
             else:
                 await ctx.send(
                     'Вы уже регистрировались на этом канале! Можете удалить свой аккаунт командой .delete_my_account и поменять аккаунт')
-            query = " SELECT * FROM playersid;"
-            cursor.execute(query)
-            massive = cursor.fetchall()
-            for i in range(len(massive)):
-                await ctx.send(massive[i])
-            cursor.close()
-            conn.close()
-
         else:
             await ctx.send('Такого никнейма в FACEIT не найдено')
     else:
         await ctx.send('Неполадки с базой данных')
 
 
+@client.command(pass_context=True)
+async def table_contents(ctx):
+    conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
+                                      config['db_port'])
+    cursor = conn.cursor()
+    query = " SELECT * FROM playersid;"
+    cursor.execute(query)
+    massive = cursor.fetchall()
+    for i in range(len(massive)):
+        await ctx.send(massive[i])
+    cursor.close()
+    conn.close()
 
 
 @client.command(pass_context=True)
@@ -147,6 +153,7 @@ async def statistica(ctx):
     cursor.close()
     conn.close()
 
+
 @client.command(pass_context=True)
 async def delete_database_entries(ctx):
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
@@ -167,6 +174,7 @@ async def delete_database_entries(ctx):
     cursor.close()
     conn.close()
 
+
 @client.event
 async def on_guild_join(guild):
     """Приветствие пользователей при добавлении бота на сервер"""
@@ -174,7 +182,9 @@ async def on_guild_join(guild):
         join_chanell = guild.system_chanell
         await join_chanell.send('На вашем сервере работает Gamestart! Чтобы изучить работу бота, введите команду .help')
     except Exception as e:
-        await guild.text_chanells[0].send('На вашем сервере работает Gamestart! Чтобы изучить работу бота, введите команду .help')
+        await guild.text_chanells[0].send(
+            'На вашем сервере работает Gamestart! Чтобы изучить работу бота, введите команду .help')
+
 
 @client.command(pass_context=True)
 async def delete_my_account(ctx):
@@ -199,5 +209,6 @@ async def delete_my_account(ctx):
 
     cursor.close()
     conn.close()
+
 
 client.run(config['TOKEN'])
