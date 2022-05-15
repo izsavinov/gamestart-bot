@@ -80,7 +80,7 @@ async def register(ctx, nickFI: str):
             found_users = cursor.fetchall()
             await ctx.send(found_users)
             await ctx.send('1')
-            if (found_users == None):
+            if (len(found_users) == 0):
                 try:
                     cursor.execute(
                         """INSERT INTO playersid (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""",
