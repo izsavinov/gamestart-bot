@@ -1,9 +1,7 @@
 import requests
 from config import Config
 from sys import argv
-import database
-import psycopg2
-from psycopg2 import OperationalError
+
 
 config = Config(argv[1]).config
 

@@ -80,7 +80,7 @@ async def getnickfi(ctx, nickFI: str):
                 try:
                     cursor.execute(
                         """INSERT INTO playersid (ID_chanell_discord, ID_discord, player_id) VALUES (%s, %s, %s);""",
-                        (ctx.guild.id, ctx.author.id, player_id))
+                        (str(ctx.guild.id), str(ctx.author.id), str(player_id)))
                 except psycopg2.Error as err:
                     await ctx.send(err)
                 conn.commit()
@@ -149,12 +149,11 @@ async def delete_database_entries(ctx):
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
-    query = """DELETE FROM playersid
-                WHERE id_chanell_discord = %s;"""
+    query = """DELETE * FROM playersid;"""
     if (conn):
         try:
             await ctx.send('///')
-            cursor.execute(query, (str(ctx.guild.id),))
+            cursor.execute(query)
             await ctx.send("Записи успешно удалены")
         except psycopg2.Error as err:
             await ctx.send(err)
@@ -163,6 +162,7 @@ async def delete_database_entries(ctx):
 
 @client.event
 async def on_guild_join(guild):
+    """Приветствие пользователей при добавлении бота на сервер"""
     try:
         join_chanell = guild.system_chanell
         await join_chanell.send('На вашем сервере работает Gamestart! Чтобы изучить работу бота, введите команду .help')
