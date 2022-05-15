@@ -149,7 +149,7 @@ async def delete_database_entries(ctx):
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
-    query = """DELETE * FROM playersid;"""
+    query = """DELETE FROM playersid;"""
     if (conn):
         try:
             await ctx.send('///')
