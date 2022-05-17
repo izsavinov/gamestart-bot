@@ -138,6 +138,9 @@ async def statistica(ctx):
         await ctx.send("Не удалось подключиться к базе данных")
     found_playerid = cursor.fetchall()
 
+    if('4f3d8083-7814-41ef-85db-bd6dc55f0632' in found_playersid):
+        await ctx.send('найдено!!!')
+
     if (found_playersid):
         await ctx.send('2')
         await ctx.send(str(found_playersid[0]))
