@@ -62,11 +62,9 @@ async def register(ctx, nickFI: str):
     api_url += "?nickname={}".format(nickFI)
     res = requests.get(api_url, headers=headers)
     data = res.json()
-    await ctx.send('1')
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
-    await ctx.send('2')
     if (conn):
         if (res.status_code == 200):
             player_id = data["player_id"]
@@ -78,8 +76,6 @@ async def register(ctx, nickFI: str):
             except psycopg2.Error as err:
                 await ctx.send(err)
             found_users = cursor.fetchall()
-            await ctx.send(found_users)
-            await ctx.send('1')
             if (len(found_users) == 0):
                 try:
                     cursor.execute(
@@ -143,6 +139,7 @@ async def statistica(ctx):
     found_playerid = cursor.fetchall()
 
     if (found_playersid):
+        await ctx.send('2')
         await ctx.send(str(found_playersid[0]))
         await ctx.send(found_playerid)
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
