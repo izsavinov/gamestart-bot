@@ -137,7 +137,7 @@ async def statistica(ctx):
     if (found_playersid):
         massive_playersid = []
         for i in range(0, len(found_playersid)):
-            massive_playersid.append(found_playersid[i])
+            massive_playersid.append(str(found_playersid[i]))
         await ctx.send(massive_playersid)
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
         player_id = statsdata.player_details(statsdata_obj, found_playerid[0][0], massive_playersid)
