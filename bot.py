@@ -119,9 +119,7 @@ async def statistica(ctx):
                FROM playersid
                WHERE id_chanell_discord = %s;"""
     try:
-        await ctx.send('/')
         cursor.execute(query, (str(ctx.guild.id),))
-        await ctx.send('//')
     except psycopg2.Error as err:
         await ctx.send("Не удалось подключиться к базе данных")
     found_playersid = cursor.fetchall()
@@ -131,9 +129,7 @@ async def statistica(ctx):
                    FROM playersid
                    WHERE id_chanell_discord = %s AND ID_discord = %s;"""
     try:
-        await ctx.send('///')
         cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
-        await ctx.send('////')
     except psycopg2.Error as err:
         await ctx.send("Не удалось подключиться к базе данных")
     found_playerid = cursor.fetchall()
@@ -142,13 +138,10 @@ async def statistica(ctx):
         await ctx.send('найдено!!!')
 
     if (found_playersid):
-        await ctx.send('2')
-        await ctx.send(str(found_playersid[0]))
+        await ctx.send(found_playersid)
         await ctx.send(found_playerid[0][0])
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
-        await ctx.send('//////')
-        player_id = statsdata.player_details(statsdata_obj, found_playerid, found_playersid)
-        await ctx.send('1')
+        player_id = statsdata.player_details(statsdata_obj, found_playerid[0][0], found_playersid[0])
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
     else:
