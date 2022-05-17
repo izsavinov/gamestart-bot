@@ -135,10 +135,14 @@ async def statistica(ctx):
     found_playerid = cursor.fetchall()
 
     if (found_playersid):
-
-        await ctx.send(found_playersid[1])
+        await ctx.send(len(found_playersid))
+        j=0 # счетчик для массива айди игроков
+        massive_playersid = []
+        for i in range(0, len(found_playersid)):
+            massive_playersid.append(found_playersid[j])
+            j += 1
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
-        player_id = statsdata.player_details(statsdata_obj, found_playerid[0][0], found_playersid)
+        player_id = statsdata.player_details(statsdata_obj, found_playerid[0][0], massive_playersid)
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
     else:

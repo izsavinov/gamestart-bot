@@ -44,8 +44,7 @@ class statsdata:
             for team_index in range(0, 2):
                 for gamer_index in range(0, 5):
                     playerid = teams[team_index]["players"][gamer_index]["player_id"]  # player_id с фэйсит
-                    j = 0  # счетчик для массива из базы данных
-                    if playerid in massive_playerid[j]:
+                    if playerid in massive_playerid:
                         gamer_index_for_stats = teams[team_index]["players"][gamer_index]
                         counter += 1
                         kills = gamer_index_for_stats["player_stats"]["Kills"]
@@ -59,7 +58,6 @@ class statsdata:
                         stata.append(
                             nickname + ':\nKills:' + kills + '\nAssists: ' + assists + '\nDeath: ' + deaths + '\nK/R Ratio: ' + K_R_Ratio +
                             '\nK/D Ratio: ' + K_D_Ratio + '\nMVPs: ' + MVPs + '\nHeadshots: ' + headshots)
-                        j += 1
                 if counter > -1:
                     break
         else:
