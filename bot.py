@@ -133,18 +133,10 @@ async def statistica(ctx):
     except psycopg2.Error as err:
         await ctx.send("Не удалось подключиться к базе данных")
     found_playerid = cursor.fetchall()
-    j = 0
-    if ('4f3d8083-7814-41ef-85db-bd6dc55f0632' in found_playersid[j]):
-        await ctx.send('найдено!!!')
-        j += 1
-    k = 0
-    if ('be826d3d-c794-44c2-9f7e-c28cd68e3f22' in found_playersid[k]):
-        await ctx.send('найдено!!!')
-        j += 1
 
     if (found_playersid):
-        await ctx.send(found_playersid)
-        await ctx.send(found_playerid[0][0])
+
+        await ctx.send(found_playersid[1])
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
         player_id = statsdata.player_details(statsdata_obj, found_playerid[0][0], found_playersid)
         for i in range(0, len(player_id)):
