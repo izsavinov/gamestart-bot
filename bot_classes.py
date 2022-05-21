@@ -56,8 +56,8 @@ class statsdata:
                         headshots = gamer_index_for_stats["player_stats"]['Headshots']
                         K_D_Ratio = gamer_index_for_stats["player_stats"]["K/D Ratio"]
                         nickname = teams[team_index]["players"][gamer_index]["nickname"]
-                        stata.append("У" +
-                                     nickname + "на последнем матче следующие результаты:" + ':\nKills: ' + kills + '\nAssists: ' + assists +
+                        stata.append("У " +
+                                     nickname + " на последнем матче следующие результаты:" + '\nKills: ' + kills + '\nAssists: ' + assists +
                                      '\nDeath: ' + deaths + '\nK/R Ratio: ' + K_R_Ratio +
                                      '\nK/D Ratio: ' + K_D_Ratio + '\nMVPs: ' + MVPs + '\nHeadshots: ' + headshots + '\n')
                         if(float(K_D_Ratio) > max_kd_ratio):

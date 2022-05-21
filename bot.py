@@ -143,6 +143,7 @@ async def get_match_stats(ctx):
             = statsdata.player_details_for_latest_match(statsdata_obj, found_playerid[0][0], massive_playersid)
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
+        await ctx.send(nick_max_kd_ratio)
         await ctx.send('Итоги последнего матча:\n Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + max_kd_ratio +
                        '.\n Больше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + max_kills + '.\nГлавной звездой стал ' +
                        nick_max_mvps + '. Всего у него MVP: ' + max_mvps + '.\nЛучшим помощником оказался ' + nick_max_assists + ' всего ассистов у него: ' + max_assists
