@@ -109,7 +109,7 @@ async def table_contents(ctx):
 
 
 @client.command(pass_context=True)
-async def statistica(ctx):
+async def get_mathch_stats(ctx):
     """Выводит статистику"""
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
@@ -124,7 +124,7 @@ async def statistica(ctx):
         await ctx.send("Не удалось подключиться к базе данных")
     found_playersid = cursor.fetchall()
 
-    # Получим player_id игрока, который вызвал команду .statistica
+    # Получим player_id игрока, который вызвал команду .get_mathch_stats
     query = """SELECT player_id
                    FROM playersid
                    WHERE id_chanell_discord = %s AND ID_discord = %s;"""
@@ -134,15 +134,42 @@ async def statistica(ctx):
         await ctx.send("Не удалось подключиться к базе данных")
     found_playerid = cursor.fetchall()
 
-    if (found_playersid):
+    if (found_playersid != []):
         massive_playersid = []
         for i in range(0, len(found_playersid)):
             massive_playersid.append(found_playersid[i][0])
-        await ctx.send(massive_playersid)
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
-        player_id = statsdata.player_details(statsdata_obj, found_playerid[0][0], massive_playersid)
+        player_id, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists\
+            = statsdata.player_details_for_latest_match(statsdata_obj, found_playerid[0][0], massive_playersid)
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
+        await ctx.send('Итоги последнего матча:\n Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + max_kd_ratio +
+                       '.\n Больше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + max_kills + '.\nГлавной звездой стал ' +
+                       nick_max_mvps + '. Всего у него MVP: ' + max_mvps + '.\nЛучшим помощником оказался ' + nick_max_assists + ' всего ассистов у него: ' + max_assists
+                       + '.\n И наконец, больше всех в голову настрелял ' + nick_max_headshots + ', количество headshots равно ' + max_headshots)
+    else:
+        await ctx.send('Вы не регистрировали свой аккаунт')
+    cursor.close()
+    conn.close()
+
+@client.command(pass_context=True)
+async def total_FI_stats(ctx):
+    """Получение общей статистики игрока за матчи, в которые он заходил через платформу FaceIT"""
+    conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
+                                      config['db_port'])
+    cursor = conn.cursor()
+    query = """SELECT player_id
+                       FROM playersid
+                       WHERE id_chanell_discord = %s AND ID_discord = %s;"""
+    try:
+        cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
+    except psycopg2.Error as err:
+        await ctx.send("Не удалось подключиться к базе данных")
+    found_playerid = cursor.fetchall()
+    if (found_playerid):
+        statsdata_obj = statsdata(config['APIID'], config['url_base'])
+        player_id = statsdata.player_stats(statsdata_obj, found_playerid[0][0])
+        await ctx.send(player_id)
     else:
         await ctx.send('Вы не регистрировали свой аккаунт')
     cursor.close()
@@ -193,10 +220,9 @@ async def delete_my_account(ctx):
                 WHERE id_chanell_discord = %s AND id_discord = %s;"""
     if (conn):
         try:
-            await ctx.send('///')
             cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
             conn.commit()
-            await ctx.send("Записи успешно удалены")
+            await ctx.send("Ваш аккаунт удален")
         except psycopg2.Error as err:
             await ctx.send(err)
     else:
@@ -204,6 +230,7 @@ async def delete_my_account(ctx):
 
     cursor.close()
     conn.close()
+
 
 
 client.run(config['TOKEN'])
