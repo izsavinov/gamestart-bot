@@ -139,19 +139,18 @@ async def get_match_stats(ctx):
         for i in range(0, len(found_playersid)):
             massive_playersid.append(found_playersid[i][0])
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
-        player_id, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists\
+        player_id, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists \
             = statsdata.player_details_for_latest_match(statsdata_obj, found_playerid[0][0], massive_playersid)
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
         await ctx.send('fdsf' + nick_max_kd_ratio)
-        await ctx.send('Итоги последнего матча:\n Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + max_kd_ratio +
-                       '.\n Больше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + max_kills + '.\nГлавной звездой стал ' +
-                       nick_max_mvps + '. Всего у него MVP: ' + max_mvps + '.\nЛучшим помощником оказался ' + nick_max_assists + ' всего ассистов у него: ' + max_assists
-                       + '.\n И наконец, больше всех в голову настрелял ' + nick_max_headshots + ', количество headshots равно ' + max_headshots)
+        await ctx.send(
+            'Итоги последнего матча:\n Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + max_kd_ratio +'.\n Больше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + max_kills + '.\nГлавной звездой стал ' + nick_max_mvps + '. Всего у него MVP: ' + max_mvps + '.\nЛучшим помощником оказался ' + nick_max_assists + ' всего ассистов у него: ' + max_assists+ '.\n И наконец, больше всех в голову настрелял ' + nick_max_headshots + ', количество headshots равно ' + max_headshots)
     else:
         await ctx.send('Вы не регистрировали свой аккаунт')
     cursor.close()
     conn.close()
+
 
 @client.command(pass_context=True)
 async def total_FI_stats(ctx):
@@ -231,7 +230,6 @@ async def delete_my_account(ctx):
 
     cursor.close()
     conn.close()
-
 
 
 client.run(config['TOKEN'])
