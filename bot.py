@@ -144,8 +144,7 @@ async def get_match_stats(ctx):
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
         await ctx.send('fdsf' + nick_max_kd_ratio)
-        await ctx.send(
-            'Итоги последнего матча:\n Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + max_kd_ratio +'.\n Больше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + max_kills + '.\nГлавной звездой стал ' + nick_max_mvps + '. Всего у него MVP: ' + max_mvps + '.\nЛучшим помощником оказался ' + nick_max_assists + ' всего ассистов у него: ' + max_assists+ '.\n И наконец, больше всех в голову настрелял ' + nick_max_headshots + ', количество headshots равно ' + max_headshots)
+        await ctx.send('Итоги последнего матча:\n Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + max_kd_ratio +'.\n Больше всех киллов сделал игрок ' )
     else:
         await ctx.send('Вы не регистрировали свой аккаунт')
     cursor.close()
