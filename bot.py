@@ -143,7 +143,7 @@ async def get_match_stats(ctx):
             = statsdata.player_details_for_latest_match(statsdata_obj, found_playerid[0][0], massive_playersid)
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
-        await ctx.send('fdsf' + max_kd_ratio)
+        await ctx.send('fdsf' + str(max_kd_ratio))
         await ctx.send('Итоги последнего матча: Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + max_kd_ratio +'. Больше всех киллов сделал игрок ' )
     else:
         await ctx.send('Вы не регистрировали свой аккаунт')
