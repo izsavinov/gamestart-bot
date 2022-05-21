@@ -109,7 +109,7 @@ async def table_contents(ctx):
 
 
 @client.command(pass_context=True)
-async def get_mathch_stats(ctx):
+async def get_match_stats(ctx):
     """Выводит статистику"""
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
@@ -134,7 +134,7 @@ async def get_mathch_stats(ctx):
         await ctx.send("Не удалось подключиться к базе данных")
     found_playerid = cursor.fetchall()
 
-    if (found_playersid != []):
+    if (len(found_playersid) != 0):
         massive_playersid = []
         for i in range(0, len(found_playersid)):
             massive_playersid.append(found_playersid[i][0])
