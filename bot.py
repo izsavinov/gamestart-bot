@@ -134,7 +134,7 @@ async def get_match_stats(ctx):
         await ctx.send("Не удалось подключиться к базе данных")
     found_playerid = cursor.fetchall()
 
-    if (len(found_playersid) != 0):
+    if (len(found_playerid) != 0):
         massive_playersid = []
         for i in range(0, len(found_playersid)):
             massive_playersid.append(found_playersid[i][0])
