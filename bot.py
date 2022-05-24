@@ -218,7 +218,7 @@ async def get_match_stats(ctx):
             colour=discord.Colour.orange()
         )
         embed3.set_thumbnail(url="attachment://gs.png")
-        embed3.add_field(name='На сыгранном матче получились следующие результаты:', value=' ')
+        embed3.add_field(name='На сыгранном матче получились следующие результаты:', value='\n')
         for i in range(0, len(player_id)):
             embed3.add_field(name=list_nick[i], value=player_id[i])
         value = 'Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + str(max_kd_ratio) + \
