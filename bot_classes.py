@@ -44,7 +44,7 @@ class statsdata:
         max_kd_ratio, max_kills, max_headshots, max_mvps, max_assists = 0, 0, 0, 0, 0
         if response.status_code == 200:
             for team_index in range(0, 2):
-                for gamer_index in range(0, 5):
+                for gamer_index in range(0, 4):
                     playerid = teams[team_index]["players"][gamer_index]["player_id"]  # player_id с фэйсит
                     if playerid in massive_playerid:
                         gamer_index_for_stats = teams[team_index]["players"][gamer_index]
