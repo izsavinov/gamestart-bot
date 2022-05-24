@@ -99,12 +99,29 @@ async def reminder(ctx, message: str):
         await asyncio.sleep(deltadate)
         await ctx.send(embed=embed3, file=img)
 
+def embed_pattern():
+    embed = discord.Embed(
+        colour=discord.Colour.orange()
+    )
+    embed.set_thumbnail(url="attachment://gs.png")
+    return embed
 
 @client.command(pass_context=True)
 async def register(ctx, nickFI: str):
     """
         Пользователь предоставляет нам информацию о своем аккаунте FACEIT, а именно - никнейм
     """
+    img = discord.File("gs.png")
+    embed1 = embed_pattern()
+    embed1.add_field(name='Регистрация', value='Успешно зарегистрированы!')
+    embed2 = embed_pattern()
+    embed2.add_field(name='Регистрация', value='Вы уже регистрировались на этом канале! Можете удалить свой аккаунт командой'
+                                               ' .delete_my_account и заново зарегистрироваться')
+    embed3 = embed_pattern()
+    embed3.add_field(name='Регистрация', value='Такого никнейма в FACEIT не найдено')
+    embed4 = embed_pattern()
+    embed4.add_field(name='Регистрация', value='Неполадки с базой данных')
+
     # Получим player_id
     headers = {
         'accept': 'application/json',
@@ -136,14 +153,13 @@ async def register(ctx, nickFI: str):
                 except psycopg2.Error as err:
                     await ctx.send(err)
                 conn.commit()
-                await ctx.send('Успешно зарегистрированы!')
+                await ctx.send(embed=embed1, file=img)
             else:
-                await ctx.send(
-                    'Вы уже регистрировались на этом канале! Можете удалить свой аккаунт командой .delete_my_account и поменять аккаунт')
+                await ctx.send(embed=embed2, file=img)
         else:
-            await ctx.send('Такого никнейма в FACEIT не найдено')
+            await ctx.send(embed=embed3, file=img)
     else:
-        await ctx.send('Неполадки с базой данных')
+        await ctx.send(embed=embed4, file=img)
 
 
 @client.command(pass_context=True)
