@@ -89,7 +89,7 @@ class statsdata:
                     break
         else:
             return None
-        if flag:
+        if (flag==0):
             return None
         return list_nick, stata, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists
 
