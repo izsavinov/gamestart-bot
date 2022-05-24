@@ -49,7 +49,7 @@ async def helpme(ctx):
                                                  'вы заходили через FaceIT.\n5. delete_my_account - так как в одном сервере, один пользователь'
                                                  ' может регистрировать только один аккаунт, то эта команда позволяет удалить текущий аккаунт,'
                                                  ' и зарегистрировать новый.')
-    await ctx.send(embed=embed)
+    await ctx.send(embed=embed, file=img)
 
 
 @client.command(pass_context=True)
