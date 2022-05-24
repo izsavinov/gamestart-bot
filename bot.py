@@ -12,7 +12,7 @@ import psycopg2
 config = Config(argv[1]).config
 client = commands.Bot(command_prefix=config['prefix'])
 url_base = config['url_base']
-
+img = discord.File("gs.png")
 
 @client.event
 async def on_ready():
@@ -28,7 +28,6 @@ async def hello(ctx):
 @client.command(pass_context=True)
 async def helpme(ctx):
     """Инструкция по пользованию ботом"""
-    img = discord.File("gs.png")
     embed = discord.Embed(
         title="Как пользоваться ботом\n",
         colour=discord.Colour.orange()
@@ -39,14 +38,14 @@ async def helpme(ctx):
                                    'и потом только вводить команду.', inline=False)
 
     embed.add_field(name='Список команд:', value='1.register - команда для регистрации в бота. Необходимо ввести эту команду,'
-                                                 ' затем ник вашего аккаунта в FaceIT\n2.reminder - команда, которая напоминает'
+                                                 ' затем ник вашего аккаунта в FaceIT\n\n2.reminder - команда, которая напоминает'
                                                  ' о предстоящих матчах. Для того, чтобы напоминалка заработала, необходимо ввести'
                                                  ' команду reminder, а затем через пробел ввести время в формате d-H-M-S'
                                                  '(Например "21-17:03:30"). Эта команда напомнит вам о предстоящем матче за день,'
-                                                 ' за 15 минут, и в момент начала вашего матча.\n3.get_match_stats - команда, которая'
-                                                 ' позволяет узнать статистику вашего последнего матча.\n4.total_FI_stats - команда, которая'
+                                                 ' за 15 минут, и в момент начала вашего матча.\n\n3.get_match_stats - команда, которая'
+                                                 ' позволяет узнать статистику вашего последнего матча.\n\n4.total_FI_stats - команда, которая'
                                                  ' позовляет узнать вашу общую статистику ваших матчей, в которые '
-                                                 'вы заходили через FaceIT.\n5. delete_my_account - так как в одном сервере, один пользователь'
+                                                 'вы заходили через FaceIT.\n\n5. delete_my_account - так как в одном сервере, один пользователь'
                                                  ' может регистрировать только один аккаунт, то эта команда позволяет удалить текущий аккаунт,'
                                                  ' и зарегистрировать новый.')
     await ctx.send(embed=embed, file=img)
@@ -56,6 +55,24 @@ async def helpme(ctx):
 async def reminder(ctx, message: str):
     """Напоминалка о начале матча, на вход передается день, часы, минуты, секунды начала матча. Сообщение о начале
     матча приходит за 15 минут и в момент, на который была запланирована игра"""
+    embed = discord.Embed(
+        colour=discord.Colour.orange()
+    )
+    embed.set_thumbnail(url="attachment://gs.png")
+    embed.add_field(name='Напоминание', value='Напоминаю, что ровно через день вы запланировали матч')
+
+    embed2 = discord.Embed(
+        colour=discord.Colour.orange()
+    )
+    embed2.set_thumbnail(url="attachment://gs.png")
+    embed2.add_field(name='Напоминание', value='Приготовьтесь! Через 15 минут начинаем')
+
+    embed3 = discord.Embed(
+        colour=discord.Colour.orange()
+    )
+    embed3.set_thumbnail(url="attachment://gs.png")
+    embed3.add_field(name='Напоминание', value='Начинаем!!! Переходите по ссылке https://www.faceit.com/ru/dashboard')
+
     datepattern = '%d-%H:%M:%S'  # Строковый тип
     gamedata = message
     time_now = datetime.datetime.now()
@@ -69,13 +86,13 @@ async def reminder(ctx, message: str):
             + time_now.hour * 3600 + time_now.minute * 60 + time_now.second)
     if(deltadate - 24 * 60 * 60 > 0):
         await asyncio.sleep(deltadate - 24 * 60 * 60 + 2)
-        await ctx.send('Напоминаю, что ровно через день вы запланировали матч')
+        await ctx.send(embed=embed, file=img)
     if (deltadate - 15 * 60 > 0):
         await asyncio.sleep(deltadate - 15 * 60 + 2)
-        await ctx.send('Приготовьтесь! Через 15 минут начинаем')
+        await ctx.send(embed=embed2, file=img)
     if (deltadate > 0):
         await asyncio.sleep(deltadate)
-        await ctx.send('Начинаем!!! Переходите по ссылке https://www.faceit.com/ru/dashboard')
+        await ctx.send(embed=embed3, file=img)
 
 
 @client.command(pass_context=True)
