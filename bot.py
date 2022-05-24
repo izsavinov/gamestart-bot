@@ -237,6 +237,14 @@ async def get_match_stats(ctx):
 @client.command(pass_context=True)
 async def total_FI_stats(ctx):
     """Получение общей статистики игрока за матчи, в которые он заходил через платформу FaceIT"""
+    img = discord.File("gs.png")
+
+    embed = embed_pattern()
+    embed.add_field(name='Статистика за матч', value='Неполадки с базой данных')
+
+    embed2 = embed_pattern()
+    embed2.add_field(name='Статистика за матч', value='Вы не регистрировали свой аккаунт')
+
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
@@ -246,14 +254,20 @@ async def total_FI_stats(ctx):
     try:
         cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
     except psycopg2.Error as err:
-        await ctx.send("Не удалось подключиться к базе данных")
+        await ctx.send(embed=embed, file=img)
     found_playerid = cursor.fetchall()
     if (found_playerid):
+        embed3 = discord.Embed(
+            title='Статистика по сыгранным играм через FaceIT',
+            colour=discord.Colour.orange()
+        )
+        embed3.set_thumbnail(url="attachment://gs.png")
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
         player_id = statsdata.player_stats(statsdata_obj, found_playerid[0][0])
-        await ctx.send(player_id)
+        embed3.add_field(name='Ниже представлена ваша статистика:', value=player_id)
+        await ctx.send(embed=embed3)
     else:
-        await ctx.send('Вы не регистрировали свой аккаунт')
+        await ctx.send(embed=embed2, file=img)
     cursor.close()
     conn.close()
 
