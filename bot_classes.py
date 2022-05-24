@@ -69,6 +69,7 @@ class statsdata:
                                      '\nK/D Ratio: ' + K_D_Ratio + '\nMVPs: ' + MVPs + '\nHeadshots: ' + headshots + '\n\n')
                         list_nick.append(nickname)
                         if(float(K_D_Ratio) > max_kd_ratio):
+                            print('fasfds')
                             nick_max_kd_ratio = nickname
                             max_kd_ratio = float(K_D_Ratio)
                         if(int(kills) > max_kills):
