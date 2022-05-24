@@ -240,10 +240,10 @@ async def total_FI_stats(ctx):
     img = discord.File("gs.png")
 
     embed = embed_pattern()
-    embed.add_field(name='Статистика за матч', value='Неполадки с базой данных')
+    embed.add_field(name='Общая статистика', value='Неполадки с базой данных')
 
     embed2 = embed_pattern()
-    embed2.add_field(name='Статистика за матч', value='Вы не регистрировали свой аккаунт')
+    embed2.add_field(name='Общая статистика', value='Вы не регистрировали свой аккаунт')
 
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
@@ -265,7 +265,7 @@ async def total_FI_stats(ctx):
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
         player_id = statsdata.player_stats(statsdata_obj, found_playerid[0][0])
         embed3.add_field(name='Ниже представлена ваша статистика:', value=player_id)
-        await ctx.send(embed=embed3)
+        await ctx.send(embed=embed3, file=img)
     else:
         await ctx.send(embed=embed2, file=img)
     cursor.close()
@@ -289,6 +289,14 @@ async def delete_my_account(ctx):
     """
         Удаляет аккаунт пользователя из базы данных
     """
+    img = discord.File("gs.png")
+
+    embed = embed_pattern()
+    embed.add_field(name='Удаление аккаунта', value='Неполадки с базой данных')
+
+    embed2 = embed_pattern()
+    embed2.add_field(name='Удаление аккаунта', value='Ваш аккаунт с этого канала удален!')
+
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
@@ -298,11 +306,11 @@ async def delete_my_account(ctx):
         try:
             cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
             conn.commit()
-            await ctx.send("Ваш аккаунт удален!")
+            await ctx.send(embed=embed2, file=img)
         except psycopg2.Error as err:
             await ctx.send(err)
     else:
-        await ctx.send("Не удалось подключиться к бд")
+        await ctx.send(embed=embed, file=img)
 
     cursor.close()
     conn.close()

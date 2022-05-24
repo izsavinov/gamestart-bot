@@ -103,7 +103,7 @@ class statsdata:
             kd_ratio = stats['K/D Ratio']
             current_win_streak = stats['Current Win Streak']
             avg_kt_ratio = stats['Average K/D Ratio']
-            text = "Общая статистика в матчах у вас следующие:" + '\nAverage Headshots %: ' + avg_headshots + '\nTotal Headshots %: ' + total_headshots \
+            text = 'Average Headshots %: ' + avg_headshots + '\nTotal Headshots %: ' + total_headshots \
                    + '\nWin Rate %: ' + win_rate + '\nLongest Win Streak: ' + longest_win_streak + '\nWins: ' + wins + '\nMatches: ' + matches + \
                    '\nK/D Ratio: ' + kd_ratio + '\nCurrent Win Streak: ' + current_win_streak + '\nAverage K/D Ratio: ' + avg_kt_ratio
             return text
