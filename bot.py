@@ -217,7 +217,7 @@ async def get_match_stats(ctx):
             colour=discord.Colour.orange()
         )
         embed3.set_thumbnail(url="attachment://gs.png")
-        embed3.add_field(name='На сыгранном матче получились следующие результаты:', value='')
+        embed3.add_field(name='На сыгранном матче получились следующие результаты:', value='\ u200')
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
             embed3.add_field(name='\ u200', value=player_id[i])
