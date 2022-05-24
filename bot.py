@@ -220,6 +220,7 @@ async def get_match_stats(ctx):
         embed3.set_thumbnail(url="attachment://gs.png")
         embed3.add_field(name='На сыгранном матче получились следующие результаты:', value='\u200b')
         for i in range(0, len(player_id)):
+            await ctx.send(i)
             embed3.add_field(name=list_nick[i], value=player_id[i])
         value = 'Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + str(max_kd_ratio) + \
                 '.\nБольше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(max_kills) + '.\nГлавной звездой стал ' + \
