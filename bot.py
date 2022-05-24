@@ -221,12 +221,10 @@ async def get_match_stats(ctx):
         for i in range(0, len(player_id)):
             embed3.add_field(name='', value=player_id[i])
         value = 'Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + str(max_kd_ratio) + \
-        '.\nБольше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(
-            max_kills) + '.\nГлавной звездой стал '
-        + nick_max_mvps + '. Всего у него MVP: ' + str(max_mvps) + '.\nЛучшим помощником оказался ' + nick_max_assists + \
-        ' всего ассистов у него: ' + str(
-            max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + \
-         ', количество headshots равно ' + str(max_headshots)
+                '.\nБольше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(max_kills) + '.\nГлавной звездой стал ' + \
+                nick_max_mvps + '. Всего у него MVP: ' + str(max_mvps) + '.\nЛучшим помощником оказался ' + nick_max_assists + \
+                ' всего ассистов у него: ' + str(max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + \
+                ', количество headshots равно ' + str(max_headshots)
 
         embed3.add_field(name='Итоги последнего матча:', value=value)
         await ctx.send(embed=embed3, file=img)
