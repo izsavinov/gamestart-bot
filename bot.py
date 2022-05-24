@@ -222,7 +222,7 @@ async def delete_my_account(ctx):
         try:
             cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
             conn.commit()
-            await ctx.send("Ваш аккаунт удален")
+            await ctx.send("Ваш аккаунт удален!")
         except psycopg2.Error as err:
             await ctx.send(err)
     else:
