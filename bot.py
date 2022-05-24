@@ -25,7 +25,7 @@ async def hello(ctx):
     await ctx.send(config['greeting'])
 
 @client.command(pass_context=True)
-async def help(ctx):
+async def helpme(ctx):
     """Инструкция по пользованию ботом"""
     await ctx.send('1')
     await ctx.send('Добро пожаловать в GameStart!!! Здесь вы узнаете как пользоваться этим ботом. Для начала, вы должны быть зар'
