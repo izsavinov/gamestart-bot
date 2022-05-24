@@ -225,7 +225,7 @@ async def get_match_stats(ctx):
                 nick_max_mvps + '. Всего у него MVP: ' + str(max_mvps) + '.\nЛучшим помощником оказался ' + nick_max_assists + \
                 ' всего ассистов у него: ' + str(max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + \
                 ', количество headshots равно ' + str(max_headshots)
-
+        await ctx.send(value)
         embed3.add_field(name='Итоги последнего матча:', value=value)
         await ctx.send(embed=embed3, file=img)
     else:
