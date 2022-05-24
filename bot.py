@@ -237,6 +237,7 @@ async def get_match_stats(ctx):
             await ctx.send(embed=embed3, file=img)
         else:
             embed3.add_field(name='\u200b', value='Ваш последний матч не доигран')
+            await ctx.send(embed=embed3, file=img)
     else:
         await ctx.send(embed=embed2, file=img)
     cursor.close()
