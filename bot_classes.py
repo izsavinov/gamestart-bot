@@ -41,7 +41,8 @@ class statsdata:
         counter = -1
         stata = []
         list_nick = []
-        max_kd_ratio, max_kills, max_headshots, max_mvps, max_assists = 0, 0, 0, 0, 0
+        player_id = ''
+        max_kd_ratio, max_kills, max_headshots, max_mvps, max_assists = -1, -1, -1, -1, -1
         if response.status_code == 200:
             for team_index in range(0, 2):
                 for gamer_index in range(0, 5):
