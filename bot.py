@@ -55,27 +55,26 @@ async def helpme(ctx):
     await ctx.send(embed=embed, file=img)
 
 
+def embed_pattern():
+    embed = discord.Embed(
+        colour=discord.Colour.orange()
+    )
+    embed.set_thumbnail(url="attachment://gs.png")
+    return embed
+
+
 @client.command(pass_context=True)
 async def reminder(ctx, message: str):
     """Напоминалка о начале матча, на вход передается день, часы, минуты, секунды начала матча. Сообщение о начале
     матча приходит за 15 минут и в момент, на который была запланирована игра"""
     img = discord.File("gs.png")
-    embed = discord.Embed(
-        colour=discord.Colour.orange()
-    )
-    embed.set_thumbnail(url="attachment://gs.png")
+    embed = embed_pattern()
     embed.add_field(name='Напоминание', value='Напоминаю, что ровно через день вы запланировали матч')
 
-    embed2 = discord.Embed(
-        colour=discord.Colour.orange()
-    )
-    embed2.set_thumbnail(url="attachment://gs.png")
+    embed2 = embed_pattern()
     embed2.add_field(name='Напоминание', value='Приготовьтесь! Через 15 минут начинаем')
 
-    embed3 = discord.Embed(
-        colour=discord.Colour.orange()
-    )
-    embed3.set_thumbnail(url="attachment://gs.png")
+    embed3 = embed_pattern()
     embed3.add_field(name='Напоминание', value='Начинаем! Переходите по ссылке https://www.faceit.com/ru/dashboard')
 
     datepattern = '%d-%H:%M:%S'  # Строковый тип
@@ -99,12 +98,6 @@ async def reminder(ctx, message: str):
         await asyncio.sleep(deltadate)
         await ctx.send(embed=embed3, file=img)
 
-def embed_pattern():
-    embed = discord.Embed(
-        colour=discord.Colour.orange()
-    )
-    embed.set_thumbnail(url="attachment://gs.png")
-    return embed
 
 @client.command(pass_context=True)
 async def register(ctx, nickFI: str):
@@ -115,8 +108,9 @@ async def register(ctx, nickFI: str):
     embed1 = embed_pattern()
     embed1.add_field(name='Регистрация', value='Успешно зарегистрированы!')
     embed2 = embed_pattern()
-    embed2.add_field(name='Регистрация', value='Вы уже регистрировались на этом канале! Можете удалить свой аккаунт командой'
-                                               ' .delete_my_account и заново зарегистрироваться')
+    embed2.add_field(name='Регистрация',
+                     value='Вы уже регистрировались на этом канале! Можете удалить свой аккаунт командой'
+                           ' .delete_my_account и заново зарегистрироваться')
     embed3 = embed_pattern()
     embed3.add_field(name='Регистрация', value='Такого никнейма в FACEIT не найдено')
     embed4 = embed_pattern()
@@ -179,6 +173,14 @@ async def table_contents(ctx):
 @client.command(pass_context=True)
 async def get_match_stats(ctx):
     """Выводит статистику"""
+    img = discord.File("gs.png")
+
+    embed = embed_pattern()
+    embed.add_field(name='Статистика за матч', value='Неполадки с базой данных')
+
+    embed2 = embed_pattern()
+    embed2.add_field(name='Статистика за матч', value='Вы не регистрировали свой аккаунт')
+
     conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
                                       config['db_port'])
     cursor = conn.cursor()
@@ -189,7 +191,7 @@ async def get_match_stats(ctx):
     try:
         cursor.execute(query, (str(ctx.guild.id),))
     except psycopg2.Error as err:
-        await ctx.send("Не удалось подключиться к базе данных")
+        await ctx.send(embed=embed, file=img)
     found_playersid = cursor.fetchall()
 
     # Получим player_id игрока, который вызвал команду .get_mathch_stats
@@ -199,7 +201,7 @@ async def get_match_stats(ctx):
     try:
         cursor.execute(query, (str(ctx.guild.id), str(ctx.author.id)))
     except psycopg2.Error as err:
-        await ctx.send("Не удалось подключиться к базе данных")
+        await ctx.send(embed=embed, file=img)
     found_playerid = cursor.fetchall()
 
     if (len(found_playerid) != 0):
@@ -209,20 +211,27 @@ async def get_match_stats(ctx):
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
         player_id, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists \
             = statsdata.player_details_for_latest_match(statsdata_obj, found_playerid[0][0], massive_playersid)
+
+        embed3 = discord.Embed(
+            title='Статистика сыгранного матча',
+            colour=discord.Colour.orange()
+        )
+        embed3.set_thumbnail(url="attachment://gs.png")
+        embed3.add_field(name='На сыгранном матче получились следующие результаты:', value='')
         for i in range(0, len(player_id)):
-            await ctx.send(player_id[i])
-        await ctx.send(
-            'Итоги последнего матча:\n Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + str(
-                max_kd_ratio) +
-            '.\nБольше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(
-                max_kills) + '.\nГлавной звездой стал ' +
-            nick_max_mvps + '. Всего у него MVP: ' + str(
-                max_mvps) + '.\nЛучшим помощником оказался ' + nick_max_assists + ' всего ассистов у него: '
-            + str(
-                max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + ', количество headshots равно ' + str(
-                max_headshots))
+            embed3.add_field(name='', value=player_id[i])
+        value = 'Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + str(max_kd_ratio) + \
+        '.\nБольше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(
+            max_kills) + '.\nГлавной звездой стал '
+        + nick_max_mvps + '. Всего у него MVP: ' + str(max_mvps) + '.\nЛучшим помощником оказался ' + nick_max_assists + \
+        ' всего ассистов у него: ' + str(
+            max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + \
+         ', количество headshots равно ' + str(max_headshots)
+
+        embed3.add_field(name='Итоги последнего матча:', value=value)
+        await ctx.send(embed=embed3, file=img)
     else:
-        await ctx.send('Вы не регистрировали свой аккаунт')
+        await ctx.send(embed=embed2, file=img)
     cursor.close()
     conn.close()
 
