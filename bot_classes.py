@@ -59,7 +59,7 @@ class statsdata:
                         stata.append("У " +
                                      nickname + " на последнем матче следующие результаты:" + '\nKills: ' + kills + '\nAssists: ' + assists +
                                      '\nDeath: ' + deaths + '\nK/R Ratio: ' + K_R_Ratio +
-                                     '\nK/D Ratio: ' + K_D_Ratio + '\nMVPs: ' + MVPs + '\nHeadshots: ' + headshots + '\n')
+                                     '\nK/D Ratio: ' + K_D_Ratio + '\nMVPs: ' + MVPs + '\nHeadshots: ' + headshots + '\n\n')
                         if(float(K_D_Ratio) > max_kd_ratio):
                             nick_max_kd_ratio = nickname
                             max_kd_ratio = float(K_D_Ratio)

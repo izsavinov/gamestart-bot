@@ -24,6 +24,23 @@ async def hello(ctx):
     """Приветствие пользователя по команде в Discord."""
     await ctx.send(config['greeting'])
 
+@client.command(pass_context=True)
+async def help(ctx):
+    """Инструкция по пользованию ботом"""
+    await ctx.send('Добро пожаловать в GameStart!!! Здесь вы узнаете как пользоваться этим ботом. Для начала, вы должны быть зар'
+                   'егистрированы в сервисе FaceIT. Чтобы вызывать'
+                   'команды, вам необходимо прописать точку(".") и потом только вводить команду.\n'
+                   'Список команд:\n1.register - команда для регистрации в бота. Необходимо'
+                   'ввести эту команду, затем ник вашего аккаунта в FaceIT\n'
+                   '2.reminder - команда, которая напоминает о предстоящих матчах. Для того, чтобы напоминалка'
+                   'заработала, необходимо ввести команду reminder, а затем через пробел ввести время в формате d-H-M-S'
+                   '(Например "21-17:03:30"). Эта команда напомнит вам о предстоящем матче за день, за 15 минут, и'
+                   'в момент начала вашего матча.\n'
+                   '3.get_match_stats - команда, которая позволяет узнать статистику вашего последнего матча.\n'
+                   '4.total_FI_stats - команда, которая позовляет узнать вашу общую статистику ваших матчей, в которые'
+                   'вы заходили через FaceIT.\n'
+                   '5. delete_my_account - так как в одном сервере, один пользователь может регистрировать только один'
+                   'аккаунт, то эта команда позволяет удалить текущий аккаунт, и зарегистрировать новый.')
 
 @client.command(pass_context=True)
 async def reminder(ctx, message: str):
@@ -40,12 +57,15 @@ async def reminder(ctx, message: str):
     deltadate = (date.day * 24 * 3600 + date.hour * 3600 + date.minute * 60 + date.second - 3 * 3600) - (
             time_now.day * 24 * 3600
             + time_now.hour * 3600 + time_now.minute * 60 + time_now.second)
+    if(deltadate - 24 * 60 * 60 > 0):
+        await asyncio.sleep(deltadate - 24 * 60 * 60 + 2)
+        await ctx.send('Напоминаю, что ровно через день вы запланировали матч')
     if (deltadate - 15 * 60 > 0):
         await asyncio.sleep(deltadate - 15 * 60 + 2)
-        await ctx.send('15 минут')
+        await ctx.send('Приготовьтесь! Через 15 минут начинаем')
     if (deltadate > 0):
         await asyncio.sleep(deltadate)
-        await ctx.send('Start')
+        await ctx.send('Начинаем!!! Переходите по ссылке https://www.faceit.com/ru/dashboard')
 
 
 @client.command(pass_context=True)
@@ -144,9 +164,9 @@ async def get_match_stats(ctx):
         for i in range(0, len(player_id)):
             await ctx.send(player_id[i])
         await ctx.send('Итоги последнего матча:\n Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + str(max_kd_ratio) +
-                       '.\n Больше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(max_kills) + '.\nГлавной звездой стал ' +
+                       '.\nБольше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(max_kills) + '.\nГлавной звездой стал ' +
                        nick_max_mvps + '. Всего у него MVP: ' + str(max_mvps) + '.\nЛучшим помощником оказался ' + nick_max_assists + ' всего ассистов у него: '
-                       + str(max_assists) + '.\n И наконец, больше всех в голову настрелял ' + nick_max_headshots + ', количество headshots равно ' + str(max_headshots))
+                       + str(max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + ', количество headshots равно ' + str(max_headshots))
     else:
         await ctx.send('Вы не регистрировали свой аккаунт')
     cursor.close()
@@ -172,27 +192,6 @@ async def total_FI_stats(ctx):
         await ctx.send(player_id)
     else:
         await ctx.send('Вы не регистрировали свой аккаунт')
-    cursor.close()
-    conn.close()
-
-
-@client.command(pass_context=True)
-async def delete_database_entries(ctx):
-    conn = database.create_connection(config['db_name'], config['db_user'], config['db_password'], config['db_host'],
-                                      config['db_port'])
-    cursor = conn.cursor()
-    query = """DELETE FROM playersid;"""
-    if (conn):
-        try:
-            await ctx.send('///')
-            cursor.execute(query)
-            conn.commit()
-            await ctx.send("Записи успешно удалены")
-        except psycopg2.Error as err:
-            await ctx.send(err)
-    else:
-        await ctx.send("Не удалось подключиться к бд")
-
     cursor.close()
     conn.close()
 
