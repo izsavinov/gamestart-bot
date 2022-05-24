@@ -47,7 +47,10 @@ class statsdata:
                 for gamer_index in range(0, 5):
                     print(team_index)
                     print(gamer_index)
-                    playerid = teams[team_index]["players"][gamer_index]["player_id"]  # player_id с фэйсит
+                    try:
+                        playerid = teams[team_index]["players"][gamer_index]["player_id"]  # player_id с фэйсит
+                    except IndexError as err:
+                        print(err)
                     if playerid in massive_playerid:
                         gamer_index_for_stats = teams[team_index]["players"][gamer_index]
                         counter += 1
