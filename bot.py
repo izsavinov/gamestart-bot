@@ -12,7 +12,6 @@ import psycopg2
 config = Config(argv[1]).config
 client = commands.Bot(command_prefix=config['prefix'])
 url_base = config['url_base']
-img = discord.File("gs.png")
 
 
 @client.event
@@ -30,6 +29,7 @@ async def hello(ctx):
 @client.command(pass_context=True)
 async def helpme(ctx):
     """Инструкция по пользованию ботом"""
+    img = discord.File("gs.png")
     embed = discord.Embed(
         title="Как пользоваться ботом\n",
         colour=discord.Colour.orange()
@@ -59,6 +59,7 @@ async def helpme(ctx):
 async def reminder(ctx, message: str):
     """Напоминалка о начале матча, на вход передается день, часы, минуты, секунды начала матча. Сообщение о начале
     матча приходит за 15 минут и в момент, на который была запланирована игра"""
+    img = discord.File("gs.png")
     embed = discord.Embed(
         colour=discord.Colour.orange()
     )
