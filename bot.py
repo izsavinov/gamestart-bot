@@ -206,10 +206,11 @@ async def get_match_stats(ctx):
 
     if (len(found_playerid) != 0):
         massive_playersid = []
+        list_nick = []
         for i in range(0, len(found_playersid)):
             massive_playersid.append(found_playersid[i][0])
         statsdata_obj = statsdata(config['APIID'], config['url_base'])
-        player_id, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists \
+        list_nick, player_id, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists \
             = statsdata.player_details_for_latest_match(statsdata_obj, found_playerid[0][0], massive_playersid)
 
         embed3 = discord.Embed(
@@ -217,16 +218,14 @@ async def get_match_stats(ctx):
             colour=discord.Colour.orange()
         )
         embed3.set_thumbnail(url="attachment://gs.png")
-        embed3.add_field(name='На сыгранном матче получились следующие результаты:', value='\ u200')
+        embed3.add_field(name='На сыгранном матче получились следующие результаты:', value=' ')
         for i in range(0, len(player_id)):
-            await ctx.send(player_id[i])
-            embed3.add_field(name='\ u200', value=player_id[i])
+            embed3.add_field(name=list_nick[i], value=player_id[i])
         value = 'Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + str(max_kd_ratio) + \
                 '.\nБольше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(max_kills) + '.\nГлавной звездой стал ' + \
                 nick_max_mvps + '. Всего у него MVP: ' + str(max_mvps) + '.\nЛучшим помощником оказался ' + nick_max_assists + \
-                ' всего ассистов у него: ' + str(max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + \
+                ' всего ассистов у него:' + str(max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + \
                 ', количество headshots равно ' + str(max_headshots)
-        await ctx.send(value)
         embed3.add_field(name='Итоги последнего матча:', value=value)
         await ctx.send(embed=embed3, file=img)
     else:

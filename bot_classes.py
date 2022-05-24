@@ -40,6 +40,7 @@ class statsdata:
         teams = data["rounds"][0]["teams"]
         counter = -1
         stata = []
+        list_nick = []
         max_kd_ratio, max_kills, max_headshots, max_mvps, max_assists = 0, 0, 0, 0, 0
         if response.status_code == 200:
             for team_index in range(0, 2):
@@ -60,6 +61,7 @@ class statsdata:
                                      nickname + ":" + '\nKills: ' + kills + '\nAssists: ' + assists +
                                      '\nDeath: ' + deaths + '\nK/R Ratio: ' + K_R_Ratio +
                                      '\nK/D Ratio: ' + K_D_Ratio + '\nMVPs: ' + MVPs + '\nHeadshots: ' + headshots + '\n\n')
+                        list_nick.append(nickname)
                         if(float(K_D_Ratio) > max_kd_ratio):
                             nick_max_kd_ratio = nickname
                             max_kd_ratio = float(K_D_Ratio)
@@ -79,7 +81,7 @@ class statsdata:
                     break
         else:
             return None
-        return stata, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists
+        return list_nick, stata, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists
 
     def player_stats(self, player_id=None):
         """
