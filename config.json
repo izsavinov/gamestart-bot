@@ -2,5 +2,5 @@
   "prefix": ".",
   "greeting": "На вашем сервере работает Gamestart!",
   "url_base": "https://open.faceit.com/data/v4",
-  "game": "csgo"
+  "game": "csgo",
 }
