@@ -41,7 +41,7 @@ class statsdata:
         counter = -1
         stata = []
         list_nick = []
-        player_id = ''
+        flag = 0
         max_kd_ratio, max_kills, max_headshots, max_mvps, max_assists = -1, -1, -1, -1, -1
         if response.status_code == 200:
             for team_index in range(0, 2):
@@ -72,6 +72,7 @@ class statsdata:
                             print('fasfds')
                             nick_max_kd_ratio = nickname
                             max_kd_ratio = float(K_D_Ratio)
+                            flag = 1
                         if(int(kills) > max_kills):
                             nick_max_kills = nickname
                             max_kills = int(kills)
@@ -87,6 +88,8 @@ class statsdata:
                 if counter > -1:
                     break
         else:
+            return None
+        if flag:
             return None
         return list_nick, stata, nick_max_kd_ratio, max_kd_ratio, nick_max_kills, max_kills, nick_max_headshots, max_headshots, nick_max_mvps, max_mvps, nick_max_assists, max_assists
 

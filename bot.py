@@ -218,17 +218,20 @@ async def get_match_stats(ctx):
             colour=discord.Colour.orange()
         )
         embed3.set_thumbnail(url="attachment://gs.png")
-        embed3.add_field(name='На сыгранном матче получились следующие результаты:', value='\u200b')
-        for i in range(0, len(player_id)):
-            await ctx.send(i)
-            embed3.add_field(name=list_nick[i], value=player_id[i])
-        value = 'Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + str(max_kd_ratio) + \
-                '.\nБольше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(max_kills) + '.\nГлавной звездой стал ' + \
-                nick_max_mvps + '. Всего у него MVP: ' + str(max_mvps) + '.\nЛучшим помощником оказался ' + nick_max_assists + \
-                ' всего ассистов у него:' + str(max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + \
-                ', количество headshots равно ' + str(max_headshots)
-        embed3.add_field(name='Итоги последнего матча:', value=value)
-        await ctx.send(embed=embed3, file=img)
+        if nick_max_kd_ratio:
+            embed3.add_field(name='На сыгранном матче получились следующие результаты:', value='\u200b')
+            for i in range(0, len(player_id)):
+                await ctx.send(i)
+                embed3.add_field(name=list_nick[i], value=player_id[i])
+            value = 'Самым эффективным игроком стал ' + nick_max_kd_ratio + ' с kd_ratio, равное ' + str(max_kd_ratio) + \
+                    '.\nБольше всех киллов сделал игрок ' + nick_max_kills + ', всего: ' + str(max_kills) + '.\nГлавной звездой стал ' + \
+                    nick_max_mvps + '. Всего у него MVP: ' + str(max_mvps) + '.\nЛучшим помощником оказался ' + nick_max_assists + \
+                    ' всего ассистов у него:' + str(max_assists) + '.\nИ наконец, больше всех в голову настрелял ' + nick_max_headshots + \
+                    ', количество headshots равно ' + str(max_headshots)
+            embed3.add_field(name='Итоги последнего матча:', value=value)
+            await ctx.send(embed=embed3, file=img)
+        else:
+            embed3.add_field(name='\u200b', value='Ваш последний матч не доигран')
     else:
         await ctx.send(embed=embed2, file=img)
     cursor.close()
