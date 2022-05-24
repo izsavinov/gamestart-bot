@@ -218,7 +218,7 @@ async def get_match_stats(ctx):
             colour=discord.Colour.orange()
         )
         embed3.set_thumbnail(url="attachment://gs.png")
-        if nick_max_kd_ratio:
+        if nick_max_kd_ratio is not None:
             embed3.add_field(name='На сыгранном матче получились следующие результаты:', value='\u200b')
             for i in range(0, len(player_id)):
                 await ctx.send(i)
