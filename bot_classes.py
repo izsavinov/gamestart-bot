@@ -46,8 +46,6 @@ class statsdata:
         if response.status_code == 200:
             for team_index in range(0, 2):
                 for gamer_index in range(0, 5):
-                    print(team_index)
-                    print(gamer_index)
                     try:
                         playerid = teams[team_index]["players"][gamer_index]["player_id"]  # player_id с фэйсит
                     except IndexError as err:
