@@ -9,6 +9,7 @@ from config import Config
 import requests
 import psycopg2
 
+
 config = Config(argv[1]).config
 client = commands.Bot(command_prefix=config['prefix'])
 url_base = config['url_base']
